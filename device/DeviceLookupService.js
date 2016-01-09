@@ -35,9 +35,9 @@ var lookUpDevices = function (onDeviceFoundHandler) {
 function attemptToLoadXml(url, handler) {
     request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log('####################');
-            console.log('body', body);
-            console.log('####################');
+            //console.log('####################');
+            //console.log('body', body);
+            //console.log('####################');
             handler(body);
         } else {
             handler(null);

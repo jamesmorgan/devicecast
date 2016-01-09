@@ -9,11 +9,12 @@ var menubar = require('menubar');
 var Menu = require('menu');
 var MenuItem = require('menu-item');
 var dialog = require('dialog');
-var mb = menubar({dir: __dirname + '/assets/', icon: 'not-castingTemplate.png'});
+var mb = menubar({dir: __dirname, icon: 'not-castingTemplate.png'});
 
 var MediaRendererClient = require('upnp-mediarenderer-client');
 
 var MenuFactory = require('./menu/MenuFactory');
+
 var DeviceLookupService = require('./device/DeviceLookupService');
 var DeviceMatcher = require('./device/DeviceMatcher');
 var LocalSourceSwitcher = require('./device/LocalSourceSwitcher');
@@ -47,16 +48,22 @@ mb.on('ready', function ready() {
     var devicesFound = [];
     var devicesAdded = [];
 
-    var devicePlaying;
-
     var streamingAddress;
 
     var onStreamingStarted = function onStreaming(streamUrl) {
         streamingAddress = streamUrl;
     };
-    var onStreamFailed = function onError(err) {
 
+    var onStreamFailed = function onError(err) {
+        console.log('Streaming process died', err);
+        dialog.showMessageBox({
+            title: 'Error',
+            message: 'Streaming has crashed, you may need to restart this application!',
+            detail: err.toString(),
+            buttons: ["OK"]
+        });
     };
+
     LocalSoundStreamer.startStream(onStreamingStarted, onStreamFailed);
 
     DeviceLookupService.lookUpDevices(function onDevice(device) {
@@ -71,18 +78,19 @@ mb.on('ready', function ready() {
                 if (DeviceMatcher.isChromecast(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastItem(device, function onClicked() {
-                        console.log('Adding Chromecast Menu Item');
+                        console.log('TODO Chromecast Audio');
                     }));
                 }
                 else if (DeviceMatcher.isChromecastAudio(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastAudioItem(device, function onClicked() {
-                        console.log('Adding Chromecast Audio Menu Item');
+                        console.log('TODO Chromecast Audio');
                     }));
                 }
-                // TODO Ruko Support
+
                 break;
             case DeviceMatcher.TYPES.UPNP:
+
                 if (DeviceMatcher.isJongo(device)) {
                     devicesAdded.push(device);
 
@@ -144,6 +152,11 @@ mb.on('ready', function ready() {
                         client.load(streamingAddress, options, function (err, result) {
                             if (err) throw err;
                             console.log('playing ...');
+
+                            // Enable 'Stop Casting' item
+                            menu.items[2].enabled = true;
+                            // Changes tray icon to "Casting"
+                            mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
                         });
                         device.upnpClient = client;
                     }));
@@ -159,6 +172,7 @@ mb.on('ready', function ready() {
     //Clicking this option stops casting audio to Chromecast
     menu.append(new MenuItem({
         label: 'Stop casting',
+        enabled: false, // default disabled as not initially playing
         click: function () {
 
             devicesAdded.forEach(function (device) {
@@ -168,22 +182,27 @@ mb.on('ready', function ready() {
                 }
             });
 
+            // Disable 'Stop Casting' item
+            menu.items[2].enabled = false;
+            mb.tray.setImage(path.join(__dirname, 'not-castingTemplate.png'));
             LocalSoundStreamer.stopStream();
             LocalSourceSwitcher.resetOriginSource();
         }
     }));
 
-    // About
-    menu.append(MenuFactory.about());
-
     var onQuitHandler = function () {
+        mb.tray.setImage(path.join(__dirname, 'not-castingTemplate.png'));
         LocalSoundStreamer.stopStream();
         LocalSourceSwitcher.resetOriginSource();
         mb.app.quit();
     };
 
+    // About
+    menu.append(MenuFactory.about());
+
     // Quit
     menu.append(MenuFactory.quit(onQuitHandler));
+
     // CMD + C death
     mb.app.on('quit', onQuitHandler);
 

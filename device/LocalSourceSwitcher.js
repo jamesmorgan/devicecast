@@ -3,16 +3,17 @@ var path = require('path');
 var original_input;
 var original_output;
 
-//Sets OSX selected sound device
+// Sets OSX selected sound device
 function setDevice(which, what) {
     exec('./audiodevice ' + which + ' "' + what + '"', {async: true});
     // TODO handle not found - output = 'device not found!'
 }
 
-//Gets OSX currently selected sound device
+// Gets OSX currently selected sound device
 function getDevice(which, callback) {
     exec('./audiodevice ' + which, {async: true}).stdout.on('data', function (data) {
-        callback(data.replace(/(\r\n|\n|\r)/gm, ""));
+        var outputDevice = data.replace(/(\r\n|\n|\r)/gm, "");
+        callback(outputDevice);
     });
 }
 

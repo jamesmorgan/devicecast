@@ -18,19 +18,25 @@ function launchWebCastProcess(onStreamingCallback, onErroCallback) {
     });
 }
 
-// Public
-module.exports = {
+var startStream = function (onStreamingCallback, onErroCallback) {
+    if (!webCastProcess) {
+        launchWebCastProcess(onStreamingCallback, onErroCallback);
+    }
+};
 
-    startStream: function (onStreamingCallback, onErroCallback) {
-        if (!webCastProcess) {
-            launchWebCastProcess(onStreamingCallback, onErroCallback);
-        }
-    },
-
-    stopStream: function () {
-        if (webCastProcess) {
+var stopStream = function () {
+    if (webCastProcess) {
+        setTimeout(function () {
+            console.log('kill');
+            webCastProcess.stdin.pause();
             webCastProcess.kill();
             webCastProcess = undefined;
-        }
+        }, 0);
     }
+};
+
+module.exports = {
+
+    startStream: startStream,
+    stopStream: stopStream
 };
