@@ -3,3 +3,4 @@
 *.iml
 node_modules
 /dlnacast-darwin-x64
+npm-debug.log

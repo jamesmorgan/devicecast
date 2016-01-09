@@ -9,6 +9,7 @@
 * How to
 * Examples
 * Move all logos to /assets
+* clean up package.json
 
 
 

@@ -47,6 +47,8 @@ mb.on('ready', function ready() {
     var devicesFound = [];
     var devicesAdded = [];
 
+    var devicePlaying;
+
     var streamingAddress;
 
     var onStreamingStarted = function onStreaming(streamUrl) {
@@ -58,9 +60,6 @@ mb.on('ready', function ready() {
     LocalSoundStreamer.startStream(onStreamingStarted, onStreamFailed);
 
     DeviceLookupService.lookUpDevices(function onDevice(device) {
-        //console.log("###############");
-        //console.log('DEVICE', device);
-        //console.log("###############");
         devicesFound.push(device);
 
         // Disable the 'Scanning for Devices...'
@@ -86,10 +85,11 @@ mb.on('ready', function ready() {
             case DeviceMatcher.TYPES.UPNP:
                 if (DeviceMatcher.isJongo(device)) {
                     devicesAdded.push(device);
+
                     deviceListMenu.append(MenuFactory.upnpDeviceItem(device, function onClicked() {
                         console.log('Attempting to play to Jongo device');
 
-                        //Sets OSX selected input and output audio devices to Soundflower
+                        // Sets OSX selected input and output audio devices to Soundflower
                         LocalSourceSwitcher.switchSource({
                             output: 'Soundflower (2ch)',
                             input: 'Soundflower (2ch)'
@@ -133,23 +133,19 @@ mb.on('ready', function ready() {
                             console.log('speedChanged', speed);
                         });
 
-                        // Load a stream with subtitles and play it immediately
                         var options = {
-                            autoplay: true
-                            //contentType: 'mp4/avi',
-                            //metadata: {
-                            //    title: 'Some Movie Title',
-                            //    creator: 'John Doe',
-                            //    type: 'audio', // can be 'video', 'audio' or 'image'
-                            //    subtitlesUrl: 'http://url.to.some/subtitles.srt'
-                            //}
+                            autoplay: true,
+                            metadata: {
+                                title: 'Streaming Mac OSX',
+                                creator: 'DeviceCast',
+                                type: 'audio'
+                            }
                         };
-
                         client.load(streamingAddress, options, function (err, result) {
                             if (err) throw err;
                             console.log('playing ...');
                         });
-
+                        device.upnpClient = client;
                     }));
                 }
                 break;
@@ -164,7 +160,16 @@ mb.on('ready', function ready() {
     menu.append(new MenuItem({
         label: 'Stop casting',
         click: function () {
+
+            devicesAdded.forEach(function (device) {
+                if (device && device.upnpClient) {
+                    console.log("Calling stop() on device", device);
+                    device.upnpClient.stop();
+                }
+            });
+
             LocalSoundStreamer.stopStream();
+            LocalSourceSwitcher.resetOriginSource();
         }
     }));
 

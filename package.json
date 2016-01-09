@@ -27,5 +27,6 @@
     "install": "./node_modules/.bin/electron-rebuild",
     "package": "./build_app.sh"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "engine": "node <= 0.10.38"
 }
