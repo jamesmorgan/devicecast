@@ -43,7 +43,7 @@ It has the ability to:
 
 #### Known Issues
 
-* Only casts to UPNP device **at present**.
+* Only casts to UPNP device **at present** - and only tested on a Jongo SX3 and Jongo TX4 speaker.
 * Application sometimes does not always kill the stream.
 * If the application crashes and on re-start you get a error similar to `listen EADDRINUSE`.
  * You need to find the orphaned process and kill is, use the following to identify the process.
@@ -58,5 +58,7 @@ lsof -i :3000
 * Allow casting to Chromecast & Chromecast Audio
 * Allow casting to Ruko
 * Allow casting to Sonos speakers
+* Build & release installer or similar
 * Fix issues when stop/start of audio stream process
 * Icons for all types
+* Web Site
