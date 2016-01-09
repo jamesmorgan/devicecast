@@ -1,0 +1,12 @@
+{
+    "host": "192.168.1.2",
+    "name": "Jongo Cast Speaker",
+    "xml": "<?xml version=\"1.0\"?>\r\n<root xmlns=\"urn:schemas-upnp-org:device-1-0\">\r\n  <specVersion>\r\n    <major>1</major>\r\n    <minor>0</minor>\r\n  </specVersion>\r\n  <URLBase>http://192.168.1.2:8008</URLBase>\r\n  <device>\r\n    <deviceType>urn:dial-multiscreen-org:device:dial:1</deviceType>\r\n    <friendlyName>Jongo Cast Speaker</friendlyName>\r\n    <manufacturer>Google Inc.</manufacturer>\r\n    <modelName>Chromecast Audio</modelName>\r\n    <UDN>uuid:f0271c8b-b842-d403-41b5-4c52119e73f3</UDN>\r\n    <iconList>\r\n      <icon>\r\n        <mimetype>image/png</mimetype>\r\n        <width>98</width>\r\n        <height>55</height>\r\n        <depth>32</depth>\r\n        <url>/setup/icon.png</url>\r\n      </icon>\r\n    </iconList>\r\n    <serviceList>\r\n      <service>\r\n        <serviceType>urn:dial-multiscreen-org:service:dial:1</serviceType>\r\n        <serviceId>urn:dial-multiscreen-org:serviceId:dial</serviceId>\r\n        <controlURL>/ssdp/notfound</controlURL>\r\n        <eventSubURL>/ssdp/notfound</eventSubURL>\r\n        <SCPDURL>http://www.google.com/cast</SCPDURL>\r\n      </service>\r\n    </serviceList>\r\n  </device>\r\n</root>\r\n",
+    "type": "chc",
+    "_events": {
+        "error": [
+            "Function"
+        ]
+    },
+    "_eventsCount": 1
+}
