@@ -138,6 +138,8 @@ mb.on('ready', function ready() {
 
                         var options = {
                             autoplay: true,
+                            contentType: 'audio/mpeg3',
+                            streamType: 'LIVE',
                             metadata: {
                                 title: 'Streaming Mac OSX',
                                 creator: 'DeviceCast',

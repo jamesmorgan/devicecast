@@ -50,6 +50,9 @@ It has the ability to:
 ````sh
 lsof -i :3000
 ````
+* If `npm install` fails with `Failed at the osx-audio@0.2.0 install script 'node-gyp rebuild'. Try to:
+ * `rm -fr node_modules`
+ * Manually install `npm install webcast-osx-audio -save` and re-run.
 
 #### Release Notes
 * [2016-02-16] - `v0.1.0` - initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker

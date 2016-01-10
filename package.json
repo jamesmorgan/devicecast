@@ -1,32 +1,31 @@
 {
-    "name": "devicecast",
-    "version": "0.1.0",
-    "description": "Cast OSX Audio to a UPNP Device OR Chromecast - powered by electron and runs as a menubar application.",
-    "author": "James Morgan",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jamesmorgan/devicecast"
-    },
-    "dependencies": {
-        "menubar": "2.3.0",
-        "nodecast-js": "0.1.2",
-        "request": "2.67.0",
-        "shelljs": "0.5.3",
-        "upnp-mediarenderer-client": "1.2.1",
-        "valid-url": "1.0.9",
-        "webcast-osx-audio": "0.1.4"
-    },
-    "devDependencies": {
-        "electron-packager": "5.2.0",
-        "electron-prebuilt": "0.36.2",
-        "electron-rebuild": "1.0.2"
-    },
-    "main": "main.js",
-    "scripts": {
-        "start": "electron .",
-        "install": "./node_modules/.bin/electron-rebuild",
-        "package": "./build_app.sh"
-    },
-    "license": "MIT",
-    "engine": "node = 0.10.38"
+  "name": "devicecast",
+  "version": "0.1.0",
+  "description": "Cast OSX Audio to a UPNP Device OR Chromecast - powered by electron and runs as a menubar application.",
+  "author": "James Morgan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jamesmorgan/devicecast"
+  },
+  "dependencies": {
+    "menubar": "2.3.0",
+    "nodecast-js": "0.1.2",
+    "request": "2.67.0",
+    "shelljs": "0.5.3",
+    "upnp-mediarenderer-client": "1.2.1",
+    "valid-url": "1.0.9",
+    "webcast-osx-audio": "0.1.4"
+  },
+  "devDependencies": {
+    "electron-packager": "5.2.0",
+    "electron-prebuilt": "0.36.2",
+    "electron-rebuild": "1.1.1"
+  },
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "./build_app.sh"
+  },
+  "license": "MIT",
+  "engine": "node = 0.10.40"
 }
