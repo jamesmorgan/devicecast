@@ -9,8 +9,8 @@ var about = function () {
         click: function () {
             dialog.showMessageBox({
                 title: 'About',
-                message: 'DLNA Cast v' + packageJson.version + '. Created by James Morgan.',
-                detail: packageJson.repository.url,
+                message: packageJson.name + ' - v' + packageJson.version + '.' + 'Created by ' + packageJson.author,
+                detail: packageJson.description + ' \n' + packageJson.repository.url,
                 buttons: ["OK"]
             });
         }

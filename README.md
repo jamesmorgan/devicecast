@@ -1,17 +1,16 @@
 ## DeviceCast
 
-Based on the work done by https://github.com/andresgottlieb/soundcast with help from some handy libraries such as:
- * TODO
+Based on the work done by [@andresgottlieb](https://github.com/andresgottlieb) and the project [Soundcast](https://github.com/andresgottlieb/soundcast) with help from some handy libraries such as:
+ * [electron]() - allow me to quickly build Mac OSX apps in javascript.
+ * [nodecast-js](https://github.com/gyzerok/nodecast-js) - for allow me to scan the network and locate Chromecasts & UPNP devices.
+ * [webcast-osx-audio](https://github.com/fardog/node-webcast-osx-audio) - for providing me with access to Mac OSX audio as a web stream.
+ * [upnp-mediarenderer-client](https://github.com/thibauts/node-upnp-mediarenderer-client) - for facilitating the routing the web stream to a UPNP device.
 
-Primarily driven by the need to stream all audio from my Mac Book to a set of recently purchased Jongo speakers.
+### Reasoning
+
+Primarily driven by the need to stream all audio from my Mac Book to a set of recently purchased [Pure](http://www.pure.com/) [Jongo](http://www.pure.com/wireless-speakers?sort=&page=1&filter_ranges=3&filter_colors=) speakers.
 After having issues with bluetooth connectivity and problems with the range bluetooth covers, this applications aims to eliminate this
 restriction by using UPNP over WIFI for better performance, namely distance.
-
-It has the ability to:
-* Scan the network for available UPNP devices, currently only supporting Jongo S3 and Jongo S4 speakers.
-* Scan the network for available Chromecasts (Both HDMI & Audio)
-* Redirect internal mac osx sound through Soundflower to create a reliable stream of sound
-* Direct this Stream over UPNP to the Jongo speakers
 
 ### Installation
 
@@ -32,8 +31,16 @@ Don't forget rebooting your computer between both steps.
 - This app has dependencies that only work on NodeJS v0.10 (.38 and over), and uses [Electron](http://electron.atom.io/).
 - To package the app, use [electron-packager](https://github.com/maxogden/electron-packager):
 
+In has the ability to:
+* Scan the network for available UPNP devices, currently only supporting [Jongo S3X](http://www.pure.com/wireless-speakers/jongo-s3x/graphite) and [Jongo TX4](http://www.pure.com/wireless-speakers/jongo-t4x/graphite) speakers.
+* Scan the network for available Chromecasts (Both HDMI & Audio)
+* Redirect internal mac osx sound through Soundflower to create a reliable stream of sound
+* Direct this Stream over UPNP to the Jongo speakers
+
 #### Known Issues
 
+* Only casts to UPNP device at present.
+* Application sometimes does not always kill the stream.
 * If the application crashes and on re-start you get a error similar to `listen EADDRINUSE`.
  * You need to find the orphaned process and kill is, use the following to identify the process.
 ````sh
@@ -41,12 +48,10 @@ lsof -i :3000
 ````
 
 #### Release Notes
-* [2016-01-16] - initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker
+* [2016-02-16] - `v0.1.0` - initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker
 
 #### TODO
-* README
-* Add links to all librires soundflower etc
-* Original author mentions/references
-* Move all logos to /assets
-* clean up package.json
-* Ruko Support
+* Allow casting to Chromecast
+* Allow casting to Ruko
+* Fix issues when stop/start of audio stream process
+* Icons for all types
