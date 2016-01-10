@@ -1,14 +1,14 @@
 ## DeviceCast
 
 Based on the work done by [@andresgottlieb](https://github.com/andresgottlieb) and the project [Soundcast](https://github.com/andresgottlieb/soundcast) with help from some handy libraries such as:
- * [electron]() - allow me to quickly build Mac OSX apps in javascript.
- * [nodecast-js](https://github.com/gyzerok/nodecast-js) - for allow me to scan the network and locate Chromecasts & UPNP devices.
+ * [electron]() - allowing me to quickly build Mac OSX apps in javascript.
+ * [nodecast-js](https://github.com/gyzerok/nodecast-js) - allowing me to scan the network and locate Chromecasts & UPNP devices.
  * [webcast-osx-audio](https://github.com/fardog/node-webcast-osx-audio) - for providing me with access to Mac OSX audio as a web stream.
- * [upnp-mediarenderer-client](https://github.com/thibauts/node-upnp-mediarenderer-client) - for facilitating the routing the web stream to a UPNP device.
+ * [upnp-mediarenderer-client](https://github.com/thibauts/node-upnp-mediarenderer-client) - for facilitation of the routing of the web stream to a UPNP device.
 
 ### Reasoning
 
-Primarily driven by the need to stream all audio from my Mac Book to a set of recently purchased [Pure](http://www.pure.com/) [Jongo](http://www.pure.com/wireless-speakers?sort=&page=1&filter_ranges=3&filter_colors=) speakers.
+Primarily driven from the need to stream audio from my Mac Book to a set of recently purchased [Pure](http://www.pure.com/) [Jongo](http://www.pure.com/wireless-speakers?sort=&page=1&filter_ranges=3&filter_colors=) speakers.
 After having issues with bluetooth connectivity and problems with the range bluetooth covers, this applications aims to eliminate this
 restriction by using UPNP over WIFI for better performance, namely distance.
 
@@ -17,9 +17,9 @@ restriction by using UPNP over WIFI for better performance, namely distance.
 ### Installation
 
 1. Download and install [Soundflower v2.0b2](https://github.com/mattingalls/Soundflower/releases/download/2.0b2/Soundflower-2.0b2.dmg) (if you have a previous version, follow [this instructions](https://support.shinywhitebox.com/hc/en-us/articles/202751790-Uninstalling-Soundflower) to uninstall it and then install v2.0b2).
-2. checkout & build `npm install && ./build_app.sh`
- *OR*
-  checkout & hack `npm install && ./run_app.sh`
+2. _checkout & build_ `npm install && ./build_app.sh`
+ **OR**
+  _checkout & hack_ `npm install && ./run_app.sh`
 3. If you want it to start automatically with your computer do [this](http://www.howtogeek.com/206178/mac-os-x-change-which-apps-start-automatically-at-login/).
 
 ## Mac OS X El Capitan
@@ -33,17 +33,17 @@ Don't forget rebooting your computer between both steps.
 
 ## Development
 - This app has dependencies that only work on NodeJS v0.10 (.38 and over), and uses [Electron](http://electron.atom.io/).
-- To package the app, use [electron-packager](https://github.com/maxogden/electron-packager):
+- To package the app, use [electron-packager](https://github.com/maxogden/electron-packager) `./build_app.sh`
 
-In has the ability to:
+It has the ability to:
 * Scan the network for available UPNP devices, currently only supporting [Jongo S3X](http://www.pure.com/wireless-speakers/jongo-s3x/graphite) and [Jongo TX4](http://www.pure.com/wireless-speakers/jongo-t4x/graphite) speakers.
 * Scan the network for available Chromecasts (Both HDMI & Audio)
-* Redirect internal mac osx sound through Soundflower to create a reliable stream of sound
+* Redirect internal Mac OSX sound through Soundflower to create a reliable stream of sound
 * Direct this Stream over UPNP to the Jongo speakers
 
 #### Known Issues
 
-* Only casts to UPNP device at present.
+* Only casts to UPNP device **at present**.
 * Application sometimes does not always kill the stream.
 * If the application crashes and on re-start you get a error similar to `listen EADDRINUSE`.
  * You need to find the orphaned process and kill is, use the following to identify the process.
@@ -55,7 +55,8 @@ lsof -i :3000
 * [2016-02-16] - `v0.1.0` - initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker
 
 #### TODO
-* Allow casting to Chromecast
+* Allow casting to Chromecast & Chromecast Audio
 * Allow casting to Ruko
+* Allow casting to Sonos speakers
 * Fix issues when stop/start of audio stream process
 * Icons for all types
