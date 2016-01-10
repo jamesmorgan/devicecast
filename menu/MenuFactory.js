@@ -9,8 +9,8 @@ var about = function () {
         click: function () {
             dialog.showMessageBox({
                 title: 'About',
-                message: packageJson.name + ' - v' + packageJson.version + '.' + 'Created by ' + packageJson.author,
-                detail: packageJson.description + ' \n' + packageJson.repository.url,
+                message: packageJson.name + ' - v' + packageJson.version + '. ' + 'Created by ' + packageJson.author,
+                detail: packageJson.description + ' \nProject: ' + packageJson.repository.url,
                 buttons: ["OK"]
             });
         }

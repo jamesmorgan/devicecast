@@ -12,10 +12,14 @@ Primarily driven by the need to stream all audio from my Mac Book to a set of re
 After having issues with bluetooth connectivity and problems with the range bluetooth covers, this applications aims to eliminate this
 restriction by using UPNP over WIFI for better performance, namely distance.
 
+![V0.1.0](/screenshots/screenshot-v0.1.0-menu.png "V0.1.0")
+
 ### Installation
 
 1. Download and install [Soundflower v2.0b2](https://github.com/mattingalls/Soundflower/releases/download/2.0b2/Soundflower-2.0b2.dmg) (if you have a previous version, follow [this instructions](https://support.shinywhitebox.com/hc/en-us/articles/202751790-Uninstalling-Soundflower) to uninstall it and then install v2.0b2).
 2. checkout & build `npm install && ./build_app.sh`
+ *OR*
+  checkout & hack `npm install && ./run_app.sh`
 3. If you want it to start automatically with your computer do [this](http://www.howtogeek.com/206178/mac-os-x-change-which-apps-start-automatically-at-login/).
 
 ## Mac OS X El Capitan
