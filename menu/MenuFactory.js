@@ -30,7 +30,7 @@ var separator = function () {
 };
 
 var upnpDeviceItem = function (device, onClickHandler) {
-    var label = device.name + ' - ' + device.host;
+    var label = device.name;
     console.log('Adding Jongo Menu Item [%s]', label);
     return new MenuItem({
         label: label,
@@ -39,7 +39,7 @@ var upnpDeviceItem = function (device, onClickHandler) {
 };
 
 var chromeCastItem = function (device, onClickHandler) {
-    var label = device.name + ' - ' + device.host;
+    var label = device.name;
     console.log('Adding Chromecast Menu Item [%s]', label);
     return new MenuItem({
         label: label,
@@ -48,8 +48,9 @@ var chromeCastItem = function (device, onClickHandler) {
 };
 
 var chromeCastAudioItem = function (device, onClickHandler) {
-    var label = device.name + ' - ' + device.host;
-    console.log('Adding Chromecast Menu Item [%s]', label);
+    var icon = String.fromCharCode('0xD83D', '0xDD0A');
+    var label = device.name + ' ' + icon;
+    console.log('Adding Chromecast Audio Menu Item [%s]', label);
     return new MenuItem({
         label: label,
         click: onClickHandler

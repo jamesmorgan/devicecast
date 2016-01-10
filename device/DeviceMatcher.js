@@ -4,12 +4,12 @@ var isJongo = function (device) {
 
 var isChromecast = function (device) {
     return device.xml.search("<manufacturer>Google Inc.</manufacturer>") !== -1
-        && device.xml.search("<modelName>Eureka Dongle</modelName>");
+        && device.xml.search("<modelName>Eureka Dongle</modelName>") !== -1;
 };
 
 var isChromecastAudio = function (device) {
     return device.xml.search("<manufacturer>Google Inc.</manufacturer>") !== -1
-        && device.xml.search("<modelName>Chromecast Audio</modelName>");
+        && device.xml.search("<modelName>Chromecast Audio</modelName>") !== -1;
 };
 
 module.exports = {

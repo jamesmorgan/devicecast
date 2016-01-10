@@ -36,11 +36,6 @@ mb.on('ready', function ready() {
     deviceListMenu.append(new MenuItem({
         label: 'Refresh Devices...',
         click: function () {
-            // Re-enable 'Scanning for Devices...'
-            menu.items[0].enabled = true;
-            for (var j = 0; j < deviceListMenu.items.length; j++) {
-                //deviceListMenu.items[j].enabled = true;
-            }
         }
     }));
     deviceListMenu.append(MenuFactory.separator());
@@ -58,7 +53,7 @@ mb.on('ready', function ready() {
         console.log('Streaming process died', err);
         dialog.showMessageBox({
             title: 'Error',
-            message: 'Streaming has crashed, you may need to restart this application!',
+            message: 'Streaming has crashed, you may need to restart the application!',
             detail: err.toString(),
             buttons: ["OK"]
         });
@@ -149,22 +144,30 @@ mb.on('ready', function ready() {
                                 type: 'audio'
                             }
                         };
+
                         client.load(streamingAddress, options, function (err, result) {
                             if (err) throw err;
                             console.log('playing ...');
 
+                            //Disables all devices until further stop
+                            for (var j = 0; j < deviceListMenu.items.length; j++) {
+                                deviceListMenu.items[j].enabled = false;
+                            }
+
                             // Enable 'Stop Casting' item
                             menu.items[2].enabled = true;
+
                             // Changes tray icon to "Casting"
                             mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
                         });
-                        device.upnpClient = client;
+                        device.client = client;
                     }));
                 }
                 break;
             default:
                 console.error('Unknown device type', device);
         }
+
         // Reset the menu items
         mb.tray.setContextMenu(menu);
     });
@@ -175,16 +178,25 @@ mb.on('ready', function ready() {
         enabled: false, // default disabled as not initially playing
         click: function () {
 
+            // Attempt to kill all clients
             devicesAdded.forEach(function (device) {
-                if (device && device.upnpClient) {
-                    console.log("Calling stop() on device", device);
-                    device.upnpClient.stop();
+                if (device && device.client) {
+                    console.log("Calling stop() on device [%s]", device.name + ' - ' + device.host);
+                    device.client.stop();
                 }
             });
 
+            // Re-Enable all devices until further notice
+            for (var j = 0; j < deviceListMenu.items.length; j++) {
+                deviceListMenu.items[j].enabled = true;
+            }
+
             // Disable 'Stop Casting' item
             menu.items[2].enabled = false;
+
+            // Switch tray icon
             mb.tray.setImage(path.join(__dirname, 'not-castingTemplate.png'));
+
             LocalSoundStreamer.stopStream();
             LocalSourceSwitcher.resetOriginSource();
         }
