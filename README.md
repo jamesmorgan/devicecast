@@ -62,3 +62,5 @@ lsof -i :3000
 * Fix issues when stop/start of audio stream process
 * Icons for all types
 * Web Site
+* Enable logging to file - remove console.log()
+
