@@ -3,7 +3,7 @@ var path = require('path');
 var webCastProcess = undefined;
 
 function launchWebCastProcess(onStreamingCallback, onErroCallback) {
-    webCastProcess = exec('./node_modules/.bin/webcast-audio', {async: true});
+    webCastProcess = exec(path.join(__dirname, '../node ', __dirname, '../node_modules/.bin/webcast-audio'), {async: true});
     webCastProcess.stdout.on('data', function (data) {
         console.log("webcast-audio stream launched", data);
         var url = data.replace('streaming at ', '').replace(/(\n|\r)+$/, '').trim();

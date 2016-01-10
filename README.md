@@ -59,12 +59,12 @@ lsof -i :3000
 
 #### TODO
 _v0.2.0_
-* Move to using webcast-osx programmatically and not using exec
+* Look at adjusting stream quality
 * Enable logging to file - remove console.log()
 
 _v0.3.0_
-* Look at adjusting stream quality
 * Ability to control volume of UPNP
+* Move to using webcast-osx programmatically and not using exec
 
 _0.4.0_
 * Allow casting to Chromecast
