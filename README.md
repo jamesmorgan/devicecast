@@ -9,8 +9,8 @@ Based on the work done by [@andresgottlieb](https://github.com/andresgottlieb) a
 ### Reasoning
 
 Primarily driven from the need to stream audio from my Mac Book to a set of recently purchased [Pure](http://www.pure.com/) [Jongo](http://www.pure.com/wireless-speakers?sort=&page=1&filter_ranges=3&filter_colors=) speakers.
-After having issues with bluetooth connectivity and problems with the range bluetooth covers, this applications aims to eliminate this
-restriction by using UPNP over WIFI for better performance, namely distance.
+After having issues with bluetooth connectivity and problems with the range bluetooth offers, I created this small application.
+This applications aims to eliminate this restrictions of bluetooth's range by using UPNP over WIFI for better performance, namely distance from source to speaker.
 
 ![V0.1.0](/screenshots/screenshot-v0.1.0-menu.png "V0.1.0")
 
