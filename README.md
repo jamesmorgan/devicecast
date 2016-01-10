@@ -55,12 +55,24 @@ lsof -i :3000
 * [2016-02-16] - `v0.1.0` - initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker
 
 #### TODO
-* Allow casting to Chromecast & Chromecast Audio
-* Allow casting to Ruko
-* Allow casting to Sonos speakers
+_v0.2.0_
+* Move to using webcast-osx programmatically and not using exec
+* Enable logging to file - remove console.log()
+
+_v0.3.0_
+* Look at adjusting stream quality
+* Ability to control volume of UPNP
+
+_0.4.0_
+* Allow casting to Chromecast
+* Allow casting to Chromecast Audio with control over pairing/grouping
+* Ability to control volume of Chromecast
+
+_Future_
 * Build & release installer or similar
+* Allow casting to Sonos speakers
+* Allow casting to Ruko
 * Fix issues when stop/start of audio stream process
 * Icons for all types
 * Web Site
-* Enable logging to file - remove console.log()
 
