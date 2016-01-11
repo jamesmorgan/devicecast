@@ -18,7 +18,8 @@ var MenuFactory = require('./menu/MenuFactory');
 var DeviceLookupService = require('./device/DeviceLookupService');
 var DeviceMatcher = require('./device/DeviceMatcher');
 var LocalSourceSwitcher = require('./device/LocalSourceSwitcher');
-var LocalSoundStreamer = require('./device/LocalSoundStreamer');
+//var LocalSoundStreamer = require('./device/LocalSoundStreamerExec');
+var LocalSoundStreamer = require('./device/LocalSoundStreamerWebcast');
 
 //Menubar construction
 mb.on('ready', function ready() {
