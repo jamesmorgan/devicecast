@@ -1,0 +1,3 @@
+Streaming has crashed, you may need to restart the application!
+
+2016-01-11 22:18:27.094 node[46044:4290360] 22:18:27.093 WARNING:  >aq> 982: Input ring buffer returning 0x400 frames of silence (trying to read: 19591168 - 19595264; current bounds 19594271 - 19595295) (0 previous warnings suppressed)

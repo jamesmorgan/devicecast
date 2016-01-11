@@ -2,5 +2,5 @@
 /.idea
 *.iml
 node_modules
-/dlnacast-darwin-x64
+/devicecast-darwin-x64
 npm-debug.log

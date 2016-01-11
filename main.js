@@ -18,8 +18,9 @@ var MenuFactory = require('./menu/MenuFactory');
 var DeviceLookupService = require('./device/DeviceLookupService');
 var DeviceMatcher = require('./device/DeviceMatcher');
 var LocalSourceSwitcher = require('./device/LocalSourceSwitcher');
-//var LocalSoundStreamer = require('./device/LocalSoundStreamerExec');
-var LocalSoundStreamer = require('./device/LocalSoundStreamerWebcast');
+var LocalSoundStreamer = require('./device/LocalSoundStreamerExec');
+//var LocalSoundStreamer = require('./device/LocalSoundStreamerWebcast');
+var UpnpMediaClientUtils = require('./device/UpnpMediaClientUtils');
 
 //Menubar construction
 mb.on('ready', function ready() {
@@ -45,6 +46,17 @@ mb.on('ready', function ready() {
     var devicesAdded = [];
 
     var streamingAddress;
+
+    var streamingOptions = {
+        autoplay: true,
+        contentType: 'audio/mpeg3',
+        streamType: 'LIVE',
+        metadata: {
+            title: 'Streaming Mac OSX',
+            creator: 'DeviceCast',
+            type: 'audio'
+        }
+    };
 
     var onStreamingStarted = function onStreaming(streamUrl) {
         streamingAddress = streamUrl;
@@ -99,71 +111,49 @@ mb.on('ready', function ready() {
                             input: 'Soundflower (2ch)'
                         });
 
-                        // Instanciate a client with a device description URL (discovered by SSDP)
-                        var client = new MediaRendererClient(device.xmlRawLocation);
+                        if (device.client) {
+                            console.log("Calling load() on device [%s]", device.name + ' - ' + device.host);
+                            device.client.load(streamingAddress, streamingOptions, function (err, result) {
+                                if (err) throw err;
+                                console.log('playing ...');
 
-                        client.on('status', function (status) {
-                            // Reports the full state of the AVTransport service the first time it fires,
-                            // then reports diffs. Can be used to maintain a reliable copy of the
-                            // service internal state.
-                            console.log('status', status);
-                        });
+                                //Disables all devices until further stop
+                                for (var j = 0; j < deviceListMenu.items.length; j++) {
+                                    deviceListMenu.items[j].enabled = false;
+                                }
 
-                        client.on('loading', function () {
-                            console.log('loading');
-                        });
+                                // Enable 'Stop Casting' item
+                                menu.items[2].enabled = true;
 
-                        client.on('playing', function () {
-                            console.log('playing');
-
-                            client.getPosition(function (err, position) {
-                                console.log('position', position); // Current position in seconds
+                                // Changes tray icon to "Casting"
+                                mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
                             });
-                            client.getDuration(function (err, duration) {
-                                console.log('duration', duration); // Media duration in seconds
+                        }
+                        else {
+
+                            // Instantiate a client with a device description URL (discovered by SSDP)
+                            var client = new MediaRendererClient(device.xmlRawLocation);
+
+                            // Simply adds in logging for all client event hooks
+                            UpnpMediaClientUtils.decorateClientMethodsForLogging(client);
+
+                            client.load(streamingAddress, streamingOptions, function (err, result) {
+                                if (err) throw err;
+                                console.log('playing ...');
+
+                                //Disables all devices until further stop
+                                for (var j = 0; j < deviceListMenu.items.length; j++) {
+                                    deviceListMenu.items[j].enabled = false;
+                                }
+
+                                // Enable 'Stop Casting' item
+                                menu.items[2].enabled = true;
+
+                                // Changes tray icon to "Casting"
+                                mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
                             });
-                        });
-
-                        client.on('paused', function () {
-                            console.log('paused');
-                        });
-
-                        client.on('stopped', function () {
-                            console.log('stopped');
-                        });
-
-                        client.on('speedChanged', function (speed) {
-                            // Fired when the user rewinds of fast-forwards the media from the remote
-                            console.log('speedChanged', speed);
-                        });
-
-                        var options = {
-                            autoplay: true,
-                            contentType: 'audio/mpeg3',
-                            streamType: 'LIVE',
-                            metadata: {
-                                title: 'Streaming Mac OSX',
-                                creator: 'DeviceCast',
-                                type: 'audio'
-                            }
-                        };
-
-                        client.load(streamingAddress, options, function (err, result) {
-                            if (err) throw err;
-                            console.log('playing ...');
-
-                            //Disables all devices until further stop
-                            for (var j = 0; j < deviceListMenu.items.length; j++) {
-                                deviceListMenu.items[j].enabled = false;
-                            }
-
-                            // Enable 'Stop Casting' item
-                            menu.items[2].enabled = true;
-
-                            // Changes tray icon to "Casting"
-                            mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
-                        });
-                        device.client = client;
+                            device.client = client;
+                        }
                     }));
                 }
                 break;
@@ -200,7 +190,6 @@ mb.on('ready', function ready() {
             // Switch tray icon
             mb.tray.setImage(path.join(__dirname, 'not-castingTemplate.png'));
 
-            LocalSoundStreamer.stopStream();
             LocalSourceSwitcher.resetOriginSource();
         }
     }));
