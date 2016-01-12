@@ -8,6 +8,7 @@
     "url": "https://github.com/jamesmorgan/devicecast"
   },
   "dependencies": {
+    "lodash": "3.10.1",
     "menubar": "2.3.0",
     "nodecast-js": "0.1.2",
     "request": "2.67.0",
@@ -18,7 +19,7 @@
   },
   "devDependencies": {
     "electron-packager": "5.2.0",
-    "electron-prebuilt": "0.36.2",
+    "electron-prebuilt": "0.36.3",
     "electron-rebuild": "1.1.1"
   },
   "main": "main.js",

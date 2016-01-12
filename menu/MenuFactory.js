@@ -5,6 +5,7 @@ var packageJson = require('../package.json');
 var about = function () {
     console.log('Adding About Menu Item');
     return new MenuItem({
+        id: 'about',
         label: 'About',
         click: function () {
             dialog.showMessageBox({
@@ -20,6 +21,7 @@ var about = function () {
 var quit = function (cb) {
     console.log('Adding Quit Menu Item');
     return new MenuItem({
+        id: 'quit',
         label: 'Quit',
         click: cb
     });
@@ -33,6 +35,7 @@ var jongoDeviceItem = function (device, onClickHandler) {
     var label = device.name;
     console.log('Adding Jongo Menu Item [%s]', label);
     return new MenuItem({
+        id: device.name,
         label: label,
         click: onClickHandler
     });
@@ -42,6 +45,7 @@ var chromeCastItem = function (device, onClickHandler) {
     var label = device.name;
     console.log('Adding Chromecast Menu Item [%s]', label);
     return new MenuItem({
+        id: device.name,
         label: label,
         click: onClickHandler
     });
@@ -52,6 +56,7 @@ var chromeCastAudioItem = function (device, onClickHandler) {
     var label = device.name + ' ' + icon;
     console.log('Adding Chromecast Audio Menu Item [%s]', label);
     return new MenuItem({
+        id: device.name,
         label: label,
         click: onClickHandler
     });
@@ -66,7 +71,7 @@ var castToDeviceMenu = function (menu) {
 };
 
 var scanningForDevices = function () {
-    console.log('Scanning for Devices...');
+    console.log('Adding Scanning for Devices...');
     return new MenuItem({
         label: 'Scanning for Devices...'
     });

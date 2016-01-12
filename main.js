@@ -3,6 +3,7 @@
 //Shell and filesystem dependencies
 require('shelljs/global');
 var path = require('path');
+var _ = require('lodash');
 
 //Electron dependencies
 var menubar = require('menubar');
@@ -135,6 +136,9 @@ mb.on('ready', function ready() {
                             // Simply adds in logging for all client event hooks
                             UpnpMediaClientUtils.decorateClientMethodsForLogging(client);
 
+                            // Attach client to the device
+                            device.client = client;
+
                             client.load(streamingAddress, streamingOptions, function (err, result) {
                                 if (err) throw err;
                                 console.log('playing ...', result);
@@ -142,13 +146,21 @@ mb.on('ready', function ready() {
                                 //Disables all devices until further stop
                                 deviceListMenu.items.forEach(disableAllItems);
 
+                                deviceListMenu.items.forEach(function (item) {
+                                    console.log('item.id', item);
+                                    if (item.id === device.name) {
+                                        item.label = item.label + ' (playing)'
+                                    } else {
+                                        item.label = item.label.replace(' (playing)', '');
+                                    }
+                                });
+
                                 // Enable 'Stop Casting' item
                                 menu.items[2].enabled = true;
 
                                 // Changes tray icon to "Casting"
                                 mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
                             });
-                            device.client = client;
                         }
                     }));
                 }
