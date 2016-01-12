@@ -1,0 +1,12 @@
+ncaught Exception:
+Error: Service urn:upnp-org:serviceId:AVTransport not provided by device
+    at /Users/andy/workspace/devicecast/node_modules/upnp-mediarenderer-client/node_modules/upnp-device-client/index.js:189:17
+    at /Users/andy/workspace/devicecast/node_modules/upnp-mediarenderer-client/node_modules/upnp-device-client/index.js:48:5
+    at /Users/andy/workspace/devicecast/node_modules/upnp-mediarenderer-client/node_modules/upnp-device-client/index.js:556:7
+    at ConcatStream.<anonymous> (/Users/andy/workspace/devicecast/node_modules/upnp-mediarenderer-client/node_modules/upnp-device-client/node_modules/concat-stream/index.js:36:43)
+    at emitNone (events.js:72:20)
+    at ConcatStream.emit (events.js:166:7)
+    at finishMaybe (/Users/andy/workspace/devicecast/node_modules/upnp-mediarenderer-client/node_modules/upnp-device-client/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:511:14)
+    at endWritable (/Users/andy/workspace/devicecast/node_modules/upnp-mediarenderer-client/node_modules/upnp-device-client/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:521:3)
+    at ConcatStream.Writable.end (/Users/andy/workspace/devicecast/node_modules/upnp-mediarenderer-client/node_modules/upnp-device-client/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:486:5)
+    at IncomingMessage.onend (_stream_readable.js:490:10)

@@ -41,6 +41,16 @@ var separator = function () {
     return new MenuItem({type: 'separator'});
 };
 
+var sonosDeviceItem = function (device, onClickHandler) {
+    var label = device.name;
+    console.log('Adding Sonos Menu Item [%s]', label);
+    return new MenuItem({
+        id: device.name,
+        label: label,
+        click: onClickHandler
+    });
+};
+
 var jongoDeviceItem = function (device, onClickHandler) {
     var label = device.name;
     console.log('Adding Jongo Menu Item [%s]', label);
@@ -93,6 +103,7 @@ module.exports = {
     quit: quit,
     scanningForDevices: scanningForDevices,
     separator: separator,
+    sonosDeviceItem: sonosDeviceItem,
     castToDeviceMenu: castToDeviceMenu,
     jongoDeviceItem: jongoDeviceItem,
     chromeCastItem: chromeCastItem,

@@ -102,70 +102,78 @@ mb.on('ready', function ready() {
                 break;
             case DeviceMatcher.TYPES.UPNP:
 
-                //if (DeviceMatcher.isJongo(device)) {
-                devicesAdded.push(device);
+                if (DeviceMatcher.isSonos(device)) {
+                    devicesAdded.push(device);
 
-                deviceListMenu.append(MenuFactory.jongoDeviceItem(device, function onClicked() {
-                    console.log('Attempting to play to Jongo device');
+                    deviceListMenu.append(MenuFactory.sonosDeviceItem(device, function onClicked() {
+                        console.log('TODO Sonos');
+                        // TODO
+                    }));
+                }
+                else if (DeviceMatcher.isJongo(device)) {
+                    devicesAdded.push(device);
 
-                    // Sets OSX selected input and output audio devices to Soundflower
-                    LocalSourceSwitcher.switchSource({
-                        output: 'Soundflower (2ch)',
-                        input: 'Soundflower (2ch)'
-                    });
+                    deviceListMenu.append(MenuFactory.jongoDeviceItem(device, function onClicked() {
+                        console.log('Attempting to play to Jongo device');
 
-                    if (device.client) {
-                        console.log("Calling load() on device [%s]", device.name + ' - ' + device.host);
-                        device.client.load(streamingAddress, streamingOptions, function (err, result) {
-                            if (err) throw err;
-                            console.log('playing ...', result);
-
-                            //Disables all devices until further stop
-                            deviceListMenu.items.forEach(disableAllItems);
-
-                            // Enable 'Stop Casting' item
-                            menu.items[2].enabled = true;
-
-                            // Changes tray icon to "Casting"
-                            mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
+                        // Sets OSX selected input and output audio devices to Soundflower
+                        LocalSourceSwitcher.switchSource({
+                            output: 'Soundflower (2ch)',
+                            input: 'Soundflower (2ch)'
                         });
-                    }
-                    else {
 
-                        // Instantiate a client with a device description URL (discovered by SSDP)
-                        var client = new MediaRendererClient(device.xmlRawLocation);
+                        if (device.client) {
+                            console.log("Calling load() on device [%s]", device.name + ' - ' + device.host);
+                            device.client.load(streamingAddress, streamingOptions, function (err, result) {
+                                if (err) throw err;
+                                console.log('playing ...', result);
 
-                        // Simply adds in logging for all client event hooks
-                        UpnpMediaClientUtils.decorateClientMethodsForLogging(client);
+                                //Disables all devices until further stop
+                                deviceListMenu.items.forEach(disableAllItems);
 
-                        // Attach client to the device
-                        device.client = client;
+                                // Enable 'Stop Casting' item
+                                menu.items[2].enabled = true;
 
-                        client.load(streamingAddress, streamingOptions, function (err, result) {
-                            if (err) throw err;
-                            console.log('playing ...', result);
-
-                            //Disables all devices until further stop
-                            deviceListMenu.items.forEach(disableAllItems);
-
-                            deviceListMenu.items.forEach(function (item) {
-                                console.log('item.id', item.id);
-                                if (item.id === device.name) {
-                                    MenuFactory.setSpeaker(item);
-                                } else {
-                                    MenuFactory.removeSpeaker(item);
-                                }
+                                // Changes tray icon to "Casting"
+                                mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
                             });
+                        }
+                        else {
 
-                            // Enable 'Stop Casting' item
-                            menu.items[2].enabled = true;
+                            // Instantiate a client with a device description URL (discovered by SSDP)
+                            var client = new MediaRendererClient(device.xmlRawLocation);
 
-                            // Changes tray icon to "Casting"
-                            mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
-                        });
-                    }
-                }));
-                //}
+                            // Simply adds in logging for all client event hooks
+                            UpnpMediaClientUtils.decorateClientMethodsForLogging(client);
+
+                            // Attach client to the device
+                            device.client = client;
+
+                            client.load(streamingAddress, streamingOptions, function (err, result) {
+                                if (err) throw err;
+                                console.log('playing ...', result);
+
+                                //Disables all devices until further stop
+                                deviceListMenu.items.forEach(disableAllItems);
+
+                                deviceListMenu.items.forEach(function (item) {
+                                    console.log('item.id', item.id);
+                                    if (item.id === device.name) {
+                                        MenuFactory.setSpeaker(item);
+                                    } else {
+                                        MenuFactory.removeSpeaker(item);
+                                    }
+                                });
+
+                                // Enable 'Stop Casting' item
+                                menu.items[2].enabled = true;
+
+                                // Changes tray icon to "Casting"
+                                mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
+                            });
+                        }
+                    }));
+                }
                 break;
             default:
                 console.error('Unknown device type', device);
