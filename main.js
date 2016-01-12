@@ -175,7 +175,13 @@ mb.on('ready', function ready() {
             devicesAdded.forEach(function (device) {
                 if (device && device.client) {
                     console.log("Calling stop() on device [%s]", device.name + ' - ' + device.host);
-                    device.client.stop();
+                    device.client.stop(function (err, result) {
+                        if (err) {
+                            console.error('Error stopping', err);
+                        } else {
+                            console.log('Stopped', result);
+                        }
+                    });
                 }
             });
 

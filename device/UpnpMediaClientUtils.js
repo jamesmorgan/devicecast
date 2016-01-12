@@ -1,3 +1,7 @@
+/**
+ *
+ * @param client
+ */
 var decorateClientMethodsForLogging = function (client) {
     client.on('status', function (status) {
         // Reports the full state of the AVTransport service the first time it fires,

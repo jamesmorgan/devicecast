@@ -60,6 +60,7 @@ lsof -i :3000
 #### TODO
 _v0.2.0_
 * Look at adjusting stream quality
+* Ability to 'Refresh Devices'
 * Enable logging to file - remove console.log()
 
 _v0.3.0_

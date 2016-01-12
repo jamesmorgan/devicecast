@@ -9,7 +9,6 @@ var startStream = function (onStreamingCallback, onErrorCallback) {
     var mono = '--m mono';
     var bitrate = '--b 256';
     var name = '--u stream.mp3';
-
     /*
      -p, --port        The port that the streaming server will listen on.  [3000]
      -b, --bitrate     The bitrate for the mp3 encoded stream.  [192]
@@ -17,8 +16,9 @@ var startStream = function (onStreamingCallback, onErrorCallback) {
      -s, --samplerate  The sample rate for the mp3 encoded stream.  [44100]
      -u, --url         The relative URL that the stream will be hosted at.  [stream.mp3]
      */
-    //webCastProcess = exec(path.join(__dirname, '../node_modules/.bin/webcast-audio') + ' ' + mono + ' ' + bitrate + ' ' + name);
-    webCastProcess = exec(path.join(__dirname, '../node_modules/.bin/webcast-audio'));
+    // TODO launch with node version as only compatible with v10
+    webCastProcess = exec(path.join(__dirname, '../node_modules/.bin/webcast-audio') + ' ' + mono + ' ' + bitrate + ' ' + name);
+    //webCastProcess = exec(path.join(__dirname, '../node_modules/.bin/webcast-audio'));
 
     webCastProcess.stdout.on('data', function (data) {
         console.log("webcast-audio stream launched", data);
@@ -36,12 +36,15 @@ var startStream = function (onStreamingCallback, onErrorCallback) {
 
 var stopStream = function () {
     if (webCastProcess) {
-        setTimeout(function () {
-            console.log('kill');
-            webCastProcess.stdin.pause();
-            webCastProcess.kill();
-            webCastProcess = undefined;
-        }, 0);
+        console.log('Attempting to kill streaming process');
+        //if (webCastProcess.stdout && webCastProcess.stdout.pause) {
+        //    webCastProcess.stdout.pause();
+        //}
+        //if (webCastProcess.stderr && webCastProcess.stderr.pause) {
+        //    webCastProcess.stderr.pause();
+        //}
+        webCastProcess.kill();
+        webCastProcess = undefined;
     }
 };
 

@@ -18,6 +18,7 @@ function getDevice(which, callback) {
 }
 
 var switchSource = function (options) {
+    console.log('Switching Audio source', options);
     if (options.input) {
         if (!original_input) {
             getDevice('input', function (data) {
@@ -39,9 +40,11 @@ var switchSource = function (options) {
 
 var resetOriginSource = function () {
     if (original_input) {
+        console.log('Resetting input device to', original_input);
         setDevice('input', original_input);
     }
     if (original_output) {
+        console.log('Resetting output device to', original_output);
         setDevice('output', original_output);
     }
 };
