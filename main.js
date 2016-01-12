@@ -102,7 +102,7 @@ mb.on('ready', function ready() {
                 if (DeviceMatcher.isJongo(device)) {
                     devicesAdded.push(device);
 
-                    deviceListMenu.append(MenuFactory.upnpDeviceItem(device, function onClicked() {
+                    deviceListMenu.append(MenuFactory.jongoDeviceItem(device, function onClicked() {
                         console.log('Attempting to play to Jongo device');
 
                         // Sets OSX selected input and output audio devices to Soundflower
@@ -115,12 +115,10 @@ mb.on('ready', function ready() {
                             console.log("Calling load() on device [%s]", device.name + ' - ' + device.host);
                             device.client.load(streamingAddress, streamingOptions, function (err, result) {
                                 if (err) throw err;
-                                console.log('playing ...');
+                                console.log('playing ...', result);
 
                                 //Disables all devices until further stop
-                                for (var j = 0; j < deviceListMenu.items.length; j++) {
-                                    deviceListMenu.items[j].enabled = false;
-                                }
+                                deviceListMenu.items.forEach(disableAllItems);
 
                                 // Enable 'Stop Casting' item
                                 menu.items[2].enabled = true;
@@ -139,12 +137,10 @@ mb.on('ready', function ready() {
 
                             client.load(streamingAddress, streamingOptions, function (err, result) {
                                 if (err) throw err;
-                                console.log('playing ...');
+                                console.log('playing ...', result);
 
                                 //Disables all devices until further stop
-                                for (var j = 0; j < deviceListMenu.items.length; j++) {
-                                    deviceListMenu.items[j].enabled = false;
-                                }
+                                deviceListMenu.items.forEach(disableAllItems);
 
                                 // Enable 'Stop Casting' item
                                 menu.items[2].enabled = true;
@@ -199,6 +195,10 @@ mb.on('ready', function ready() {
             LocalSourceSwitcher.resetOriginSource();
         }
     }));
+
+    var disableAllItems = function (item) {
+        item.enabled = false
+    };
 
     var onQuitHandler = function () {
         mb.tray.setImage(path.join(__dirname, 'not-castingTemplate.png'));

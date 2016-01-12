@@ -29,7 +29,7 @@ var separator = function () {
     return new MenuItem({type: 'separator'});
 };
 
-var upnpDeviceItem = function (device, onClickHandler) {
+var jongoDeviceItem = function (device, onClickHandler) {
     var label = device.name;
     console.log('Adding Jongo Menu Item [%s]', label);
     return new MenuItem({
@@ -78,7 +78,7 @@ module.exports = {
     scanningForDevices: scanningForDevices,
     separator: separator,
     castToDeviceMenu: castToDeviceMenu,
-    upnpDeviceItem: upnpDeviceItem,
+    jongoDeviceItem: jongoDeviceItem,
     chromeCastItem: chromeCastItem,
     chromeCastAudioItem: chromeCastAudioItem
 };

@@ -59,23 +59,20 @@ lsof -i :3000
 
 #### TODO
 _v0.2.0_
-* Look at adjusting stream quality
+* Look at adjusting stream quality - providing options
+* Allow start/stop of casting & switching to other devices once stopped
+
+_Future_
 * Ability to 'Refresh Devices'
 * Enable logging to file - remove console.log()
-
-_v0.3.0_
-* Ability to control volume of UPNP
-* Move to using webcast-osx programmatically and not using exec
-
-_0.4.0_
 * Allow casting to Chromecast
 * Allow casting to Chromecast Audio with control over pairing/grouping
 * Ability to control volume of Chromecast
-
-_Future_
-* Build & release installer or similar
 * Allow casting to Sonos speakers
 * Allow casting to Ruko
+* Move to using webcast-osx programmatically and not using exec - Note possible at present - due to restrictions in webcast-osx-audio
+* Ability to control volume of UPNP
+* Build & release installer or similar
 * Fix issues when stop/start of audio stream process
 * Icons for all types
 * Web Site
