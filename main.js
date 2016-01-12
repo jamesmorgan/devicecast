@@ -78,6 +78,8 @@ mb.on('ready', function ready() {
     DeviceLookupService.lookUpDevices(function onDevice(device) {
         devicesFound.push(device);
 
+        console.log('Found Device', device.name);
+
         // Disable the 'Scanning for Devices...'
         menu.items[0].enabled = false;
 
@@ -147,11 +149,11 @@ mb.on('ready', function ready() {
                                 deviceListMenu.items.forEach(disableAllItems);
 
                                 deviceListMenu.items.forEach(function (item) {
-                                    console.log('item.id', item);
+                                    console.log('item.id', item.id);
                                     if (item.id === device.name) {
-                                        item.label = item.label + ' (playing)'
+                                        MenuFactory.setSpeaker(item);
                                     } else {
-                                        item.label = item.label.replace(' (playing)', '');
+                                        MenuFactory.removeSpeaker(item);
                                     }
                                 });
 
