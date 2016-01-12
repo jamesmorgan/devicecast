@@ -55,13 +55,15 @@ lsof -i :3000
  * Manually install `npm install webcast-osx-audio -save` and re-run.
 
 #### Release Notes
-* [2016-02-16] - `v0.1.0` - initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker
+* [2016-01-08] - `v0.1.0`
+ * initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker
+
+* [2016-01-xx] - `_v0.2.0_`
+ * Look at adjusting stream quality - providing options
+ * Allow start/stop of casting & switching to other devices once stopped
+ * Set icon device when playing
 
 #### TODO
-_v0.2.0_
-* Look at adjusting stream quality - providing options
-* Allow start/stop of casting & switching to other devices once stopped
-* Set icon device when playing
 
 _Future_
 * Ability to 'Refresh Devices'
