@@ -107,8 +107,9 @@ mb.on('ready', function ready() {
 
                     deviceListMenu.append(MenuFactory.sonosDeviceItem(device, function onClicked() {
                         console.log('TODO Sonos');
-                        // TODO
+                        // TODO on click integrate with sonos
                     }));
+
                 }
                 else if (DeviceMatcher.isJongo(device)) {
                     devicesAdded.push(device);
