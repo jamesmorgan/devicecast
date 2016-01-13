@@ -61,15 +61,18 @@ lsof -i :3000
 * [2016-01-xx] - `_v0.2.0_`
  * Look at adjusting stream quality - providing options
  * Allow start/stop of casting & switching to other devices once stopped
+ * Notifications on start/stop streaming
 
 #### TODO
 
 _Future_
-* Enable logging to file - remove console.log()
-* Ability to 'Refresh Devices'
-* Verbose mode - enabled detailed logging
 * Allow casting to Chromecast
 * Allow casting to Chromecast Audio
+* Enable logging to file - remove console.log()
+* Verbose mode - enabled detailed logging [-v]
+* Allow streaming over microphone over speakers (very doable but is a required feature)
+* Allow general discovery mode where every device is logged out e.g. [-d]
+* Ability to 'Refresh Devices'
 * Allow casting to Sonos speakers
 * Allow casting to Ruko
 * Ability to control Chromecast Audio pairing/grouping
@@ -78,6 +81,7 @@ _Future_
 * Build & release installer or similar
 * Icons for all types
 * Web Site
+* config store - http://stackoverflow.com/questions/30465034/where-to-store-user-settings-in-electron-atom-shell-application
 
 _BLOCKED_
 * Set icon device when playing - see: https://github.com/atom/electron/issues/528

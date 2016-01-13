@@ -10,6 +10,7 @@ var menubar = require('menubar');
 var Menu = require('menu');
 var MenuItem = require('menu-item');
 var dialog = require('dialog');
+var notifier = require('node-notifier');
 var mb = menubar({dir: __dirname, icon: 'not-castingTemplate.png'});
 
 var MediaRendererClient = require('upnp-mediarenderer-client');
@@ -122,6 +123,14 @@ mb.on('ready', function ready() {
                             input: 'Soundflower (2ch)'
                         });
 
+                        notifier.notify({
+                            title: 'Casting',
+                            message: device.name,
+                            icon: path.join(__dirname, 'castingTemplate.png'),
+                            wait: false,
+                            sticky: false
+                        });
+
                         if (device.client) {
                             console.log("Calling load() on device [%s]", device.name + ' - ' + device.host);
                             device.client.load(streamingAddress, streamingOptions, function (err, result) {
@@ -197,6 +206,14 @@ mb.on('ready', function ready() {
                             console.error('Error stopping', err);
                         } else {
                             console.log('Stopped', result);
+
+                            notifier.notify({
+                                title: 'Stopped',
+                                message: device.name,
+                                icon: path.join(__dirname, 'not-castingTemplate.png'),
+                                wait: false,
+                                sticky: false
+                            });
                         }
                     });
                 }
