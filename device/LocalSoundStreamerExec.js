@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 
 var webCastProcess = undefined;
 
-var startStream = function (onStreamingCallback, onErrorCallback) {
+var startStream = function (callback) {
     console.log('Attempting to start stream using exec');
 
     var mono = '--m mono';
@@ -22,12 +22,12 @@ var startStream = function (onStreamingCallback, onErrorCallback) {
 
     webCastProcess.stdout.on('data', function (data) {
         console.log("webcast-audio stream launched", data);
-        var url = data.replace('streaming at ', '').replace(/(\n|\r)+$/, '').trim();
-        onStreamingCallback(url);
+        var streamUrl = data.replace('streaming at ', '').replace(/(\n|\r)+$/, '').trim();
+        callback(null, streamUrl);
     });
     webCastProcess.stderr.on('data', function (data) {
         console.log("webcast-audio error", data);
-        onErrorCallback(data);
+        callback(data);
     });
     webCastProcess.on('exit', function (code) {
         console.log('child process exited with code ' + code);

@@ -6,10 +6,12 @@ var SOUND_ICON = String.fromCharCode('0xD83D', '0xDD0A');
 
 var setSpeaker = function (menuItem) {
     menuItem.label = menuItem.label + ' ' + SOUND_ICON;
+    console.log('Setting menu label to [%s]', menuItem.label);
 };
 
 var removeSpeaker = function (menuItem) {
     menuItem.label = menuItem.label.replace(' ' + SOUND_ICON, '');
+    console.log('Removing menu label to [%s]', menuItem.label);
 };
 
 var about = function () {

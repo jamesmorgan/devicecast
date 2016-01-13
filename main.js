@@ -39,6 +39,7 @@ mb.on('ready', function ready() {
     deviceListMenu.append(new MenuItem({
         label: 'Refresh Devices...',
         click: function () {
+            console.log('TODO - Refresh Items');
         }
     }));
     deviceListMenu.append(MenuFactory.separator());
@@ -59,21 +60,19 @@ mb.on('ready', function ready() {
         }
     };
 
-    var onStreamingStarted = function onStreaming(streamUrl) {
-        streamingAddress = streamUrl;
-    };
-
-    var onStreamFailed = function onError(err) {
-        console.log('Streaming process died', err);
-        dialog.showMessageBox({
-            title: 'Error',
-            message: 'Streaming has crashed, you may need to restart the application!',
-            detail: err.toString(),
-            buttons: ["OK"]
-        });
-    };
-
-    LocalSoundStreamer.startStream(onStreamingStarted, onStreamFailed);
+    LocalSoundStreamer.startStream(function (err, streamUrl) {
+        if (err) {
+            console.log('Streaming process died', err);
+            dialog.showMessageBox({
+                title: 'Error',
+                message: 'Streaming has crashed, you may need to restart the application!',
+                detail: err.toString(),
+                buttons: ["OK"]
+            });
+        } else {
+            streamingAddress = streamUrl;
+        }
+    });
 
     DeviceLookupService.lookUpDevices(function onDevice(device) {
         devicesFound.push(device);
@@ -158,8 +157,7 @@ mb.on('ready', function ready() {
                                 deviceListMenu.items.forEach(disableAllItems);
 
                                 deviceListMenu.items.forEach(function (item) {
-                                    console.log('item.id', item.id);
-                                    if (item.id === device.name) {
+                                    if (item.label === device.name) {
                                         MenuFactory.setSpeaker(item);
                                     } else {
                                         MenuFactory.removeSpeaker(item);
@@ -203,6 +201,9 @@ mb.on('ready', function ready() {
                     });
                 }
             });
+
+            // Clean up playing speaker icon
+            deviceListMenu.items.forEach(MenuFactory.removeSpeaker);
 
             // Re-Enable all devices until further notice
             for (var j = 0; j < deviceListMenu.items.length; j++) {

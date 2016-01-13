@@ -61,13 +61,13 @@ lsof -i :3000
 * [2016-01-xx] - `_v0.2.0_`
  * Look at adjusting stream quality - providing options
  * Allow start/stop of casting & switching to other devices once stopped
- * Set icon device when playing
 
 #### TODO
 
 _Future_
-* Ability to 'Refresh Devices'
 * Enable logging to file - remove console.log()
+* Ability to 'Refresh Devices'
+* Verbose mode - enabled detailed logging
 * Allow casting to Chromecast
 * Allow casting to Chromecast Audio
 * Allow casting to Sonos speakers
@@ -78,5 +78,9 @@ _Future_
 * Build & release installer or similar
 * Icons for all types
 * Web Site
+
+_BLOCKED_
+* Set icon device when playing - see: https://github.com/atom/electron/issues/528
 * Move to using webcast-osx programmatically and not using exec - Note possible at present - due to restrictions in webcast-osx-audio
+* Upgrade to latest node - see: https://github.com/fardog/node-osx-audio/issues/7
 
