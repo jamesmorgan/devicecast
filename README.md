@@ -58,10 +58,12 @@ lsof -i :3000
 * [2016-01-08] - `v0.1.0`
  * initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker
 
-* [2016-01-xx] - `_v0.2.0_`
+* [2016-01-13] - `_v0.2.0_`
  * Look at adjusting stream quality - providing options
  * Allow start/stop of casting & switching to other devices once stopped
  * Notifications on start/stop streaming
+
+* [2016-01-xx] - `_v0.3.0_`
 
 #### TODO
 
