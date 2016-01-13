@@ -123,13 +123,7 @@ mb.on('ready', function ready() {
                             input: 'Soundflower (2ch)'
                         });
 
-                        notifier.notify({
-                            title: 'Casting',
-                            message: device.name,
-                            icon: path.join(__dirname, 'castingTemplate.png'),
-                            wait: false,
-                            sticky: false
-                        });
+                        notifyCastingStarted(device);
 
                         if (device.client) {
                             console.log("Calling load() on device [%s]", device.name + ' - ' + device.host);
@@ -206,14 +200,7 @@ mb.on('ready', function ready() {
                             console.error('Error stopping', err);
                         } else {
                             console.log('Stopped', result);
-
-                            notifier.notify({
-                                title: 'Stopped',
-                                message: device.name,
-                                icon: path.join(__dirname, 'not-castingTemplate.png'),
-                                wait: false,
-                                sticky: false
-                            });
+                            notifyCastingStopped(device);
                         }
                     });
                 }
@@ -259,5 +246,31 @@ mb.on('ready', function ready() {
 
     // Set the menu items
     mb.tray.setContextMenu(menu);
+
+    var notifyCastingStarted = function (device) {
+        notifier.notify({
+            title: 'Casting',
+            message: device.name,
+            icon: path.join(__dirname, 'castingTemplate.png'),
+            //appIcon: path.join(__dirname, 'castingTemplate.png'),
+            //contentImage: path.join(__dirname, 'castingTemplate.png'),
+            //sender: path.join(__dirname, 'castingTemplate.png'),
+            wait: false,
+            sticky: false
+        });
+    };
+
+    var notifyCastingStopped = function (device) {
+        notifier.notify({
+            title: 'Stopped',
+            message: device.name,
+            icon: path.join(__dirname, 'not-castingTemplate.png'),
+            //appIcon: path.join(__dirname, 'not-castingTemplate.png'),
+            //contentImage: path.join(__dirname, 'not-castingTemplate.png'),
+            //sender: path.join(__dirname, 'not-castingTemplate.png'),
+            wait: false,
+            sticky: false
+        });
+    };
 
 });
