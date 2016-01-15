@@ -71,7 +71,7 @@ _Future_
 * Allow casting to Chromecast
 * Allow casting to Chromecast Audio
 * Enable logging to file - remove console.log()
-* Verbose mode - enabled detailed logging [-v]
+* Verbose mode - enabled trace e.g. logging of device [-v]
 * Allow streaming over microphone over speakers (very doable but is a required feature)
 * Allow general discovery mode where every device is logged out e.g. [-d]
 * Ability to 'Refresh Devices'
