@@ -15,14 +15,14 @@ var mb = menubar({dir: __dirname, icon: 'not-castingTemplate.png'});
 
 var MediaRendererClient = require('upnp-mediarenderer-client');
 
-var MenuFactory = require('./menu/MenuFactory');
+var MenuFactory = require('./lib/menu/MenuFactory');
 
-var DeviceLookupService = require('./device/DeviceLookupService');
-var DeviceMatcher = require('./device/DeviceMatcher');
-var LocalSourceSwitcher = require('./device/LocalSourceSwitcher');
-var LocalSoundStreamer = require('./device/LocalSoundStreamerExec');
-//var LocalSoundStreamer = require('./device/LocalSoundStreamerWebcast');
-var UpnpMediaClientUtils = require('./device/UpnpMediaClientUtils');
+var DeviceLookupService = require('./lib/device/DeviceLookupService');
+var DeviceMatcher = require('./lib/device/DeviceMatcher');
+var LocalSourceSwitcher = require('./lib/device/LocalSourceSwitcher');
+var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerExec');
+//var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerWebcast');
+var UpnpMediaClientUtils = require('./lib/device/UpnpMediaClientUtils');
 
 //Menubar construction
 mb.on('ready', function ready() {
