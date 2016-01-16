@@ -64,14 +64,14 @@ lsof -i :3000
  * Notifications on start/stop streaming
 
 * [2016-01-xx] - `_v0.3.0_`
+* Enable logging to file - remove console.log()
 
 #### TODO
 
 _Future_
+* Verbose mode - enabled trace e.g. logging of device
 * Allow casting to Chromecast
 * Allow casting to Chromecast Audio
-* Enable logging to file - remove console.log()
-* Verbose mode - enabled trace e.g. logging of device [-v]
 * Allow streaming over microphone over speakers (very doable but is a required feature)
 * Allow general discovery mode where every device is logged out e.g. [-d]
 * Ability to 'Refresh Devices'

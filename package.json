@@ -16,7 +16,8 @@
     "shelljs": "0.5.3",
     "upnp-mediarenderer-client": "1.2.1",
     "valid-url": "1.0.9",
-    "webcast-osx-audio": "0.1.4"
+    "webcast-osx-audio": "0.1.4",
+    "winston": "2.1.1"
   },
   "devDependencies": {
     "electron-packager": "5.2.0",

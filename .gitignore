@@ -2,5 +2,6 @@
 /.idea
 *.iml
 node_modules
+/logs
 /devicecast-darwin-x64
 npm-debug.log

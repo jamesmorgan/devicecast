@@ -21,8 +21,9 @@ var DeviceLookupService = require('./lib/device/DeviceLookupService');
 var DeviceMatcher = require('./lib/device/DeviceMatcher');
 var LocalSourceSwitcher = require('./lib/device/LocalSourceSwitcher');
 var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerExec');
-//var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerWebcast');
 var UpnpMediaClientUtils = require('./lib/device/UpnpMediaClientUtils');
+
+var logger = require('./lib/common/logger');
 
 //Menubar construction
 mb.on('ready', function ready() {
@@ -40,7 +41,7 @@ mb.on('ready', function ready() {
     deviceListMenu.append(new MenuItem({
         label: 'Refresh Devices...',
         click: function () {
-            console.log('TODO - Refresh Items');
+            logger.debug('TODO - Refresh Items');
         }
     }));
     deviceListMenu.append(MenuFactory.separator());
@@ -63,7 +64,7 @@ mb.on('ready', function ready() {
 
     LocalSoundStreamer.startStream(function (err, streamUrl) {
         if (err) {
-            console.log('Streaming process died', err);
+            logger.info('Streaming process died', err);
             dialog.showMessageBox({
                 title: 'Error',
                 message: 'Streaming has crashed, you may need to restart the application!',
@@ -78,7 +79,7 @@ mb.on('ready', function ready() {
     DeviceLookupService.lookUpDevices(function onDevice(device) {
         devicesFound.push(device);
 
-        console.log('Found Device', device.name);
+        logger.debug('Found Device', device.name);
 
         // Disable the 'Scanning for Devices...'
         menu.items[0].enabled = false;
@@ -89,13 +90,13 @@ mb.on('ready', function ready() {
                 if (DeviceMatcher.isChromecast(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastItem(device, function onClicked() {
-                        console.log('TODO Chromecast Audio');
+                        logger.debug('TODO Chromecast Audio');
                     }));
                 }
                 else if (DeviceMatcher.isChromecastAudio(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastAudioItem(device, function onClicked() {
-                        console.log('TODO Chromecast Audio');
+                        logger.debug('TODO Chromecast Audio');
                     }));
                 }
 
@@ -106,7 +107,7 @@ mb.on('ready', function ready() {
                     devicesAdded.push(device);
 
                     deviceListMenu.append(MenuFactory.sonosDeviceItem(device, function onClicked() {
-                        console.log('TODO Sonos');
+                        logger.debug('TODO Sonos');
                         // TODO on click integrate with sonos
                     }));
 
@@ -115,7 +116,7 @@ mb.on('ready', function ready() {
                     devicesAdded.push(device);
 
                     deviceListMenu.append(MenuFactory.jongoDeviceItem(device, function onClicked() {
-                        console.log('Attempting to play to Jongo device');
+                        logger.info('Attempting to play to Jongo device');
 
                         // Sets OSX selected input and output audio devices to Soundflower
                         LocalSourceSwitcher.switchSource({
@@ -126,10 +127,10 @@ mb.on('ready', function ready() {
                         notifyCastingStarted(device);
 
                         if (device.client) {
-                            console.log("Calling load() on device [%s]", device.name + ' - ' + device.host);
+                            logger.info("Calling load() on device [%s]", device.name + ' - ' + device.host);
                             device.client.load(streamingAddress, streamingOptions, function (err, result) {
                                 if (err) throw err;
-                                console.log('playing ...', result);
+                                logger.debug('playing ...', result);
 
                                 //Disables all devices until further stop
                                 deviceListMenu.items.forEach(disableAllItems);
@@ -154,7 +155,7 @@ mb.on('ready', function ready() {
 
                             client.load(streamingAddress, streamingOptions, function (err, result) {
                                 if (err) throw err;
-                                console.log('playing ...', result);
+                                logger.debug('playing ...', result);
 
                                 //Disables all devices until further stop
                                 deviceListMenu.items.forEach(disableAllItems);
@@ -194,12 +195,12 @@ mb.on('ready', function ready() {
             // Attempt to kill all clients
             devicesAdded.forEach(function (device) {
                 if (device && device.client) {
-                    console.log("Calling stop() on device [%s]", device.name + ' - ' + device.host);
+                    logger.info("Calling stop() on device [%s]", device.name + ' - ' + device.host);
                     device.client.stop(function (err, result) {
                         if (err) {
                             console.error('Error stopping', err);
                         } else {
-                            console.log('Stopped', result);
+                            logger.debug('Stopped', result);
                             notifyCastingStopped(device);
                         }
                     });
