@@ -10,18 +10,19 @@ var menubar = require('menubar');
 var Menu = require('menu');
 var MenuItem = require('menu-item');
 var dialog = require('dialog');
-var notifier = require('node-notifier');
 var mb = menubar({dir: __dirname, icon: 'not-castingTemplate.png'});
 
 var MediaRendererClient = require('upnp-mediarenderer-client');
 
-var MenuFactory = require('./lib/menu/MenuFactory');
+var MenuFactory = require('./lib/native/MenuFactory');
+var NotificationService = require('./lib/native/NotificationService');
 
 var DeviceLookupService = require('./lib/device/DeviceLookupService');
 var DeviceMatcher = require('./lib/device/DeviceMatcher');
 var LocalSourceSwitcher = require('./lib/device/LocalSourceSwitcher');
-var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerExec');
 var UpnpMediaClientUtils = require('./lib/device/UpnpMediaClientUtils');
+
+var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerExec');
 
 var logger = require('./lib/common/logger');
 
@@ -46,7 +47,6 @@ mb.on('ready', function ready() {
     }));
     deviceListMenu.append(MenuFactory.separator());
 
-    var devicesFound = [];
     var devicesAdded = [];
 
     var streamingAddress;
@@ -77,9 +77,6 @@ mb.on('ready', function ready() {
     });
 
     DeviceLookupService.lookUpDevices(function onDevice(device) {
-        devicesFound.push(device);
-
-        logger.info('Found Device [%s]', device.name);
 
         // Disable the 'Scanning for Devices...'
         menu.items[0].enabled = false;
@@ -103,12 +100,10 @@ mb.on('ready', function ready() {
 
                 if (DeviceMatcher.isSonos(device)) {
                     devicesAdded.push(device);
-
                     deviceListMenu.append(MenuFactory.sonosDeviceItem(device, function onClicked() {
                         logger.debug('TODO Sonos');
                         // TODO on click integrate with sonos
                     }));
-
                 }
                 else if (DeviceMatcher.isJongo(device)) {
                     devicesAdded.push(device);
@@ -122,7 +117,7 @@ mb.on('ready', function ready() {
                             input: 'Soundflower (2ch)'
                         });
 
-                        notifyCastingStarted(device);
+                        NotificationService.notifyCastingStarted(device);
 
                         if (device.client) {
                             logger.info("Calling load() on device [%s]", device.name + ' - ' + device.host);
@@ -139,9 +134,7 @@ mb.on('ready', function ready() {
                                 // Changes tray icon to "Casting"
                                 mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
                             });
-                        }
-                        else {
-
+                        } else {
                             // Instantiate a client with a device description URL (discovered by SSDP)
                             var client = new MediaRendererClient(device.xmlRawLocation);
 
@@ -199,7 +192,7 @@ mb.on('ready', function ready() {
                             logger.error('Error stopping', err);
                         } else {
                             logger.debug('Stopped', result);
-                            notifyCastingStopped(device);
+                            NotificationService.notifyCastingStopped(device);
                         }
                     });
                 }
@@ -245,31 +238,5 @@ mb.on('ready', function ready() {
 
     // Set the menu items
     mb.tray.setContextMenu(menu);
-
-    var notifyCastingStarted = function (device) {
-        notifier.notify({
-            title: 'Casting',
-            message: device.name,
-            icon: path.join(__dirname, 'castingTemplate.png'),
-            //appIcon: path.join(__dirname, 'castingTemplate.png'),
-            //contentImage: path.join(__dirname, 'castingTemplate.png'),
-            //sender: path.join(__dirname, 'castingTemplate.png'),
-            wait: false,
-            sticky: false
-        });
-    };
-
-    var notifyCastingStopped = function (device) {
-        notifier.notify({
-            title: 'Stopped',
-            message: device.name,
-            icon: path.join(__dirname, 'not-castingTemplate.png'),
-            //appIcon: path.join(__dirname, 'not-castingTemplate.png'),
-            //contentImage: path.join(__dirname, 'not-castingTemplate.png'),
-            //sender: path.join(__dirname, 'not-castingTemplate.png'),
-            wait: false,
-            sticky: false
-        });
-    };
 
 });

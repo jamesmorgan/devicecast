@@ -70,10 +70,10 @@ lsof -i :3000
 #### TODO
 
 _Future_
+* Allow general discovery mode where every device is logged out e.g. [-d]
 * Allow casting to Chromecast
 * Allow casting to Chromecast Audio
-* Allow streaming over microphone over speakers (very doable but is a required feature)
-* Allow general discovery mode where every device is logged out e.g. [-d]
+* Allow streaming over microphone over speakers (very doable but is a required feature?)
 * Ability to 'Refresh Devices'
 * Allow casting to Sonos speakers
 * Allow casting to Ruko
