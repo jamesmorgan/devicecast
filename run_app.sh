@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-npm start
+npm start "$@"

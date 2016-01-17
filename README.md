@@ -65,11 +65,11 @@ lsof -i :3000
 
 * [2016-01-xx] - `_v0.3.0_`
 * Enable logging to file - remove console.log()
+* Verbose mode - enabled logging of unknown devices e.g. logging of device
 
 #### TODO
 
 _Future_
-* Verbose mode - enabled trace e.g. logging of device
 * Allow casting to Chromecast
 * Allow casting to Chromecast Audio
 * Allow streaming over microphone over speakers (very doable but is a required feature)

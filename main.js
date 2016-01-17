@@ -79,14 +79,13 @@ mb.on('ready', function ready() {
     DeviceLookupService.lookUpDevices(function onDevice(device) {
         devicesFound.push(device);
 
-        logger.debug('Found Device', device.name);
+        logger.info('Found Device [%s]', device.name);
 
         // Disable the 'Scanning for Devices...'
         menu.items[0].enabled = false;
 
         switch (device.type) {
             case DeviceMatcher.TYPES.CHROMECAST:
-
                 if (DeviceMatcher.isChromecast(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastItem(device, function onClicked() {
@@ -99,7 +98,6 @@ mb.on('ready', function ready() {
                         logger.debug('TODO Chromecast Audio');
                     }));
                 }
-
                 break;
             case DeviceMatcher.TYPES.UPNP:
 
@@ -179,7 +177,7 @@ mb.on('ready', function ready() {
                 }
                 break;
             default:
-                console.error('Unknown device type', device);
+                logger.error('Unknown recognised device found', logger.level === 'verbose' ? device : device.name);
         }
 
         // Reset the menu items
@@ -198,7 +196,7 @@ mb.on('ready', function ready() {
                     logger.info("Calling stop() on device [%s]", device.name + ' - ' + device.host);
                     device.client.stop(function (err, result) {
                         if (err) {
-                            console.error('Error stopping', err);
+                            logger.error('Error stopping', err);
                         } else {
                             logger.debug('Stopped', result);
                             notifyCastingStopped(device);
