@@ -30,6 +30,8 @@ var UpnpMediaClientUtils = require('./lib/device/utils/UpnpMediaClientUtils');
 
 var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerExec');
 
+var JongoSpeaker = require('./lib/device/controls/JongoSpeaker');
+
 var logger = require('./lib/common/logger');
 
 //Menubar construction
@@ -191,55 +193,23 @@ mb.on('ready', function ready() {
                             input: 'Soundflower (2ch)'
                         });
 
-                        NotificationService.notifyCastingStarted(device);
-
-                        if (device.client) {
-                            logger.info("Calling load() on device [%s]", device.name + ' - ' + device.host);
-                            device.client.load(streamingAddress, streamingOptions, function (err, result) {
-                                if (err) throw err;
-                                logger.debug('playing ...', result);
-
-                                //Disables all devices until further stop
-                                deviceListMenu.items.forEach(disableAllItems);
-
-                                // Enable 'Stop Casting' item
-                                menu.items[2].enabled = true;
-
-                                // Changes tray icon to "Casting"
-                                mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
-                            });
-                        } else {
-                            // Instantiate a client with a device description URL (discovered by SSDP)
-                            var client = new MediaRendererClient(device.xmlRawLocation);
-
-                            // Simply adds in logging for all client event hooks
-                            UpnpMediaClientUtils.decorateClientMethodsForLogging(client);
-
-                            // Attach client to the device
-                            device.client = client;
-
-                            client.load(streamingAddress, streamingOptions, function (err, result) {
-                                if (err) throw err;
-                                logger.debug('playing ...', result);
-
-                                //Disables all devices until further stop
-                                deviceListMenu.items.forEach(disableAllItems);
-
-                                deviceListMenu.items.forEach(function (item) {
-                                    if (item.label === device.name) {
-                                        MenuFactory.setSpeaker(item);
-                                    } else {
-                                        MenuFactory.removeSpeaker(item);
-                                    }
-                                });
-
-                                // Enable 'Stop Casting' item
-                                menu.items[2].enabled = true;
-
-                                // Changes tray icon to "Casting"
-                                mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
-                            });
+                        if (!device.controls) {
+                            device.controls = new JongoSpeaker(device);
                         }
+
+                        device.controls.play(streamingAddress, function () {
+                            //Disables all devices until further stop
+                            deviceListMenu.items.forEach(disableAllItems);
+
+                            // set speak icon when playing
+                            deviceListMenu.items.forEach(setSpeakIcon.bind({device: device}));
+
+                            // Enable 'Stop Casting' item
+                            menu.items[2].enabled = true;
+
+                            // Changes tray icon to "Casting"
+                            mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
+                        });
                     }));
                 }
                 break;
@@ -257,19 +227,11 @@ mb.on('ready', function ready() {
         enabled: true, // default disabled as not initially playing
         click: function () {
 
-            // Attempt to kill all clients
+            // Attempt to stop all controls
             devicesAdded.forEach(function (device) {
-                if (device && device.client && _.isFunction(device.client.stop)) {
-                    logger.info("Calling stop() on device [%s]", device.name + ' - ' + device.host);
-
-                    // Jongo
-                    device.client.stop(function (err, result) {
-                        if (err) {
-                            logger.error('Error stopping', err);
-                        } else {
-                            logger.debug('Stopped', result);
-                            NotificationService.notifyCastingStopped(device);
-                        }
+                if (device && device.controls && _.isFunction(device.controls.stop)) {
+                    device.controls.stop(function (err, result) {
+                        // do something...
                     });
                 } else {
                     logger.debug('Unknown handled device', _.keys(device))
@@ -296,6 +258,14 @@ mb.on('ready', function ready() {
 
     var disableAllItems = function (item) {
         item.enabled = false
+    };
+
+    var setSpeakIcon = function (item) {
+        if (item.label === this.device.name) {
+            MenuFactory.setSpeaker(item);
+        } else {
+            MenuFactory.removeSpeaker(item);
+        }
     };
 
     var onQuitHandler = function () {
