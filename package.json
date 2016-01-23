@@ -1,6 +1,6 @@
 {
   "name": "devicecast",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cast OSX Audio to a UPNP Device OR Chromecast - powered by electron and runs as a menubar application.",
   "author": "James Morgan",
   "repository": {
