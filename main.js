@@ -12,15 +12,21 @@ var MenuItem = require('menu-item');
 var dialog = require('dialog');
 var mb = menubar({dir: __dirname, icon: 'not-castingTemplate.png'});
 
+/* Libs - Jongo's */
 var MediaRendererClient = require('upnp-mediarenderer-client');
 
+/* Libs - Chromecast */
+var Client = require('castv2-client').Client;
+var DefaultMediaReceiver = require('castv2-client').DefaultMediaReceiver;
+
+/* Internals */
 var MenuFactory = require('./lib/native/MenuFactory');
 var NotificationService = require('./lib/native/NotificationService');
 
-var DeviceLookupService = require('./lib/device/DeviceLookupService');
-var DeviceMatcher = require('./lib/device/DeviceMatcher');
-var LocalSourceSwitcher = require('./lib/device/LocalSourceSwitcher');
-var UpnpMediaClientUtils = require('./lib/device/UpnpMediaClientUtils');
+var DeviceLookupService = require('./lib/device/utils/DeviceLookupService');
+var DeviceMatcher = require('./lib/device/utils/DeviceMatcher');
+var LocalSourceSwitcher = require('./lib/device/utils/LocalSourceSwitcher');
+var UpnpMediaClientUtils = require('./lib/device/utils/UpnpMediaClientUtils');
 
 var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerExec');
 
@@ -51,6 +57,7 @@ mb.on('ready', function ready() {
 
     var streamingAddress;
 
+    //@deprecated
     var streamingOptions = {
         autoplay: true,
         contentType: 'audio/mpeg3',
@@ -86,13 +93,80 @@ mb.on('ready', function ready() {
                 if (DeviceMatcher.isChromecast(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastItem(device, function onClicked() {
-                        logger.debug('TODO Chromecast Audio');
+                        logger.info('Attempting to play to Chromecast');
+
+                        // Sets OSX selected input and output audio devices to Soundflower
+                        LocalSourceSwitcher.switchSource({
+                            output: 'Soundflower (2ch)',
+                            input: 'Soundflower (2ch)'
+                        });
+
+                        NotificationService.notifyCastingStarted(device);
+
+                        var client = new Client();
+
+                        // Attach client to the device
+                        device.client = client;
+
+                        client.connect(device.host, function () {
+                            console.log('connected, launching app ...');
+
+                            // Enable 'Stop Casting' item
+                            menu.items[2].enabled = true;
+
+                            // Changes tray icon to "Casting"
+                            mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
+
+                            client.launch(DefaultMediaReceiver, function (err, player) {
+                                if (err) throw err;
+
+                                var media = {
+                                    // Here you can plug an URL to any mp4, webm, mp3 or jpg file with the proper contentType.
+                                    contentId: streamingAddress,
+                                    contentType: 'audio/mpeg3',
+                                    streamType: 'LIVE', // BUFFERED or LIVE
+
+                                    // Title and cover displayed while buffering
+                                    metadata: {
+                                        type: 0,
+                                        //type: 'audio',
+                                        metadataType: 0,
+                                        title: "Streaming Mac OSX",
+                                        images: [],
+                                        creator: 'DeviceCast'
+                                    }
+                                };
+
+                                player.on('status', function (status) {
+                                    console.log('status broadcast playerState=%s', status.playerState);
+                                });
+
+                                console.log('app "%s" launched, loading media %s ...', player.session.displayName, media.contentId);
+
+                                player.load(media, {autoplay: true}, function (err, status) {
+                                    console.log('media loaded playerState=%s', status.playerState);
+
+                                    //// Seek to 2 minutes after 15 seconds playing.
+                                    //setTimeout(function () {
+                                    //    player.seek(2 * 60, function (err, status) {
+                                    //        //
+                                    //    });
+                                    //}, 15000);
+                                });
+                            });
+                        });
+
+                        client.on('error', function (err) {
+                            console.log('Error: %s', err.message);
+                            client.close();
+                        });
+
                     }));
                 }
                 else if (DeviceMatcher.isChromecastAudio(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastAudioItem(device, function onClicked() {
-                        logger.debug('TODO Chromecast Audio');
+                        logger.info('TODO - Attempting to play to Chromecast Audio');
                     }));
                 }
                 break;
@@ -180,13 +254,15 @@ mb.on('ready', function ready() {
     //Clicking this option stops casting audio to Chromecast
     menu.append(new MenuItem({
         label: 'Stop casting',
-        enabled: false, // default disabled as not initially playing
+        enabled: true, // default disabled as not initially playing
         click: function () {
 
             // Attempt to kill all clients
             devicesAdded.forEach(function (device) {
-                if (device && device.client) {
+                if (device && device.client && _.isFunction(device.client.stop)) {
                     logger.info("Calling stop() on device [%s]", device.name + ' - ' + device.host);
+
+                    // Jongo
                     device.client.stop(function (err, result) {
                         if (err) {
                             logger.error('Error stopping', err);
@@ -195,6 +271,8 @@ mb.on('ready', function ready() {
                             NotificationService.notifyCastingStopped(device);
                         }
                     });
+                } else {
+                    logger.debug('Unknown handled device', _.keys(device))
                 }
             });
 

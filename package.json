@@ -8,6 +8,7 @@
     "url": "https://github.com/jamesmorgan/devicecast"
   },
   "dependencies": {
+    "castv2-client": "1.1.1",
     "lodash": "3.10.1",
     "menubar": "2.3.0",
     "node-notifier": "4.4.0",

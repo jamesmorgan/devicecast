@@ -31,6 +31,16 @@ Soundflower to v2.0b2 is required for El Capitan.
 
 Don't forget rebooting your computer between both steps.
 
+## Tested On
+| Device  | Outcome |
+| ------- | ------- |
+| Jongo SX3  | PASS |
+| Jongo TX4  | PASS |
+| Jongo TX6  | PASS |
+| Chromecast Audio  | TODO |
+| Chromecast | TODO |
+| Sonos | TODO |
+
 ## Development
 - This app has dependencies that only work on NodeJS v0.10 (.38 and over), and uses [Electron](http://electron.atom.io/).
 - To package the app, use [electron-packager](https://github.com/maxogden/electron-packager) `./build_app.sh`
@@ -70,13 +80,13 @@ lsof -i :3000
 #### TODO
 
 _Future_
-* Allow general discovery mode where every device is logged out e.g. [-d]
 * Allow casting to Chromecast
 * Allow casting to Chromecast Audio
+* Allow general discovery mode where every device is logged out e.g. [-d]
 * Allow streaming over microphone over speakers (very doable but is a required feature?)
 * Ability to 'Refresh Devices'
-* Allow casting to Sonos speakers
-* Allow casting to Ruko
+* Allow casting to Sonos speakers - https://github.com/bencevans/node-sonos
+* Allow casting to Ruko - https://github.com/TheThingSystem/node-roku
 * Ability to control Chromecast Audio pairing/grouping
 * Ability to control volume of Chromecast
 * Ability to control volume of UPNP Device
@@ -89,4 +99,4 @@ _BLOCKED_
 * Set icon device when playing - see: https://github.com/atom/electron/issues/528
 * Move to using webcast-osx programmatically and not using exec - Note possible at present - due to restrictions in webcast-osx-audio
 * Upgrade to latest node - see: https://github.com/fardog/node-osx-audio/issues/7
-
+§
