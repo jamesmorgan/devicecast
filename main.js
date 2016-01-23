@@ -12,9 +12,6 @@ var MenuItem = require('menu-item');
 var dialog = require('dialog');
 var mb = menubar({dir: __dirname, icon: 'not-castingTemplate.png'});
 
-/* Libs - Jongo's */
-var MediaRendererClient = require('upnp-mediarenderer-client');
-
 /* Libs - Chromecast */
 var Client = require('castv2-client').Client;
 var DefaultMediaReceiver = require('castv2-client').DefaultMediaReceiver;
@@ -31,6 +28,7 @@ var UpnpMediaClientUtils = require('./lib/device/utils/UpnpMediaClientUtils');
 var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerExec');
 
 var JongoSpeaker = require('./lib/device/controls/JongoSpeaker');
+var ChromeCast = require('./lib/device/controls/ChromeCast');
 
 var logger = require('./lib/common/logger');
 
@@ -92,10 +90,10 @@ mb.on('ready', function ready() {
 
         switch (device.type) {
             case DeviceMatcher.TYPES.CHROMECAST:
-                if (DeviceMatcher.isChromecast(device)) {
+                if (DeviceMatcher.isChromecast(device) || DeviceMatcher.isChromecastAudio(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastItem(device, function onClicked() {
-                        logger.info('Attempting to play to Chromecast');
+                        logger.info('Attempting to play to Chromecast', device.name);
 
                         // Sets OSX selected input and output audio devices to Soundflower
                         LocalSourceSwitcher.switchSource({
@@ -103,72 +101,23 @@ mb.on('ready', function ready() {
                             input: 'Soundflower (2ch)'
                         });
 
-                        NotificationService.notifyCastingStarted(device);
+                        if (!device.controls) {
+                            device.controls = new ChromeCast(device);
+                        }
 
-                        var client = new Client();
+                        device.controls.play(streamingAddress, function (err, result) {
+                            //Disables all devices until further stop
+                            deviceListMenu.items.forEach(disableAllItems);
 
-                        // Attach client to the device
-                        device.client = client;
-
-                        client.connect(device.host, function () {
-                            console.log('connected, launching app ...');
+                            // set speak icon when playing
+                            deviceListMenu.items.forEach(setSpeakIcon.bind({device: device}));
 
                             // Enable 'Stop Casting' item
                             menu.items[2].enabled = true;
 
                             // Changes tray icon to "Casting"
                             mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
-
-                            client.launch(DefaultMediaReceiver, function (err, player) {
-                                if (err) throw err;
-
-                                var media = {
-                                    // Here you can plug an URL to any mp4, webm, mp3 or jpg file with the proper contentType.
-                                    contentId: streamingAddress,
-                                    contentType: 'audio/mpeg3',
-                                    streamType: 'LIVE', // BUFFERED or LIVE
-
-                                    // Title and cover displayed while buffering
-                                    metadata: {
-                                        type: 0,
-                                        //type: 'audio',
-                                        metadataType: 0,
-                                        title: "Streaming Mac OSX",
-                                        images: [],
-                                        creator: 'DeviceCast'
-                                    }
-                                };
-
-                                player.on('status', function (status) {
-                                    console.log('status broadcast playerState=%s', status.playerState);
-                                });
-
-                                console.log('app "%s" launched, loading media %s ...', player.session.displayName, media.contentId);
-
-                                player.load(media, {autoplay: true}, function (err, status) {
-                                    console.log('media loaded playerState=%s', status.playerState);
-
-                                    //// Seek to 2 minutes after 15 seconds playing.
-                                    //setTimeout(function () {
-                                    //    player.seek(2 * 60, function (err, status) {
-                                    //        //
-                                    //    });
-                                    //}, 15000);
-                                });
-                            });
                         });
-
-                        client.on('error', function (err) {
-                            console.log('Error: %s', err.message);
-                            client.close();
-                        });
-
-                    }));
-                }
-                else if (DeviceMatcher.isChromecastAudio(device)) {
-                    devicesAdded.push(device);
-                    deviceListMenu.append(MenuFactory.chromeCastAudioItem(device, function onClicked() {
-                        logger.info('TODO - Attempting to play to Chromecast Audio');
                     }));
                 }
                 break;
@@ -185,7 +134,7 @@ mb.on('ready', function ready() {
                     devicesAdded.push(device);
 
                     deviceListMenu.append(MenuFactory.jongoDeviceItem(device, function onClicked() {
-                        logger.info('Attempting to play to Jongo device');
+                        logger.info('Attempting to play to Jongo device', device.name);
 
                         // Sets OSX selected input and output audio devices to Soundflower
                         LocalSourceSwitcher.switchSource({
