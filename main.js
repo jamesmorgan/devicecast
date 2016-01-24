@@ -57,18 +57,6 @@ mb.on('ready', function ready() {
 
     var streamingAddress;
 
-    //@deprecated
-    var streamingOptions = {
-        autoplay: true,
-        contentType: 'audio/mpeg3',
-        streamType: 'LIVE',
-        metadata: {
-            title: 'Streaming Mac OSX',
-            creator: 'DeviceCast',
-            type: 'audio'
-        }
-    };
-
     LocalSoundStreamer.startStream(function (err, streamUrl) {
         if (err) {
             logger.info('Streaming process died', err);
@@ -105,7 +93,7 @@ mb.on('ready', function ready() {
                             device.controls = new ChromeCast(device);
                         }
 
-                        device.controls.play(streamingAddress, function (err, result) {
+                        device.controls.play(streamingAddress, function () {
                             //Disables all devices until further stop
                             deviceListMenu.items.forEach(disableAllItems);
 
