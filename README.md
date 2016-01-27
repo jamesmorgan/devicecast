@@ -12,7 +12,8 @@ Primarily driven from the need to stream audio from my Mac Book to a set of rece
 After having issues with bluetooth connectivity and problems with the range bluetooth offers, I created this small application.
 This applications aims to eliminate this restrictions of bluetooth's range by using UPNP over WIFI for better performance, namely distance from source to speaker.
 
-![V0.1.0](/screenshots/screenshot-v0.1.0-menu.png "V0.1.0")
+![0.3.0 Device Menu](/screenshots/screenshot-v0.3.0-device-menu.png "0.3.0 Device Menu")
+![0.3.0 Stream Menu](/screenshots/screenshot-v0.3.0-stream-menu.png "0.3.0 Stream Menu")
 
 ### Installation
 
@@ -65,25 +66,27 @@ lsof -i :3000
  * Manually install `npm install webcast-osx-audio -save` and re-run.
 
 #### Release Notes
-* [2016-01-08] - `v0.1.0`
+* [2016-01-08] - `0.1.0`
  * initial release - basic support for redirection of Mac OSX Audio to UPNP Jongo speaker
 
-* [2016-01-13] - `_v0.2.0_`
+* [2016-01-13] - `_0.2.0_`
  * Look at adjusting stream quality - providing options
  * Allow start/stop of casting & switching to other devices once stopped
  * Notifications on start/stop streaming
 
-* [2016-01-xx] - `_v0.3.0_`
+* [2016-01-27] - `_0.3.0_`
 * Enable logging to file - remove console.log()
 * Verbose mode - enabled logging of unknown devices e.g. logging of device
+* Allow streaming over microphone over speakers (very doable but is a required feature?)
+
+* [2016-XX-XX] - `_0.4.0_`
+* Allow casting to Chromecast
+* Allow casting to Chromecast Audio
 
 #### TODO
 
 _Future_
-* Allow casting to Chromecast
-* Allow casting to Chromecast Audio
 * Allow general discovery mode where every device is logged out e.g. [-d]
-* Allow streaming over microphone over speakers (very doable but is a required feature?)
 * Ability to 'Refresh Devices'
 * Allow casting to Sonos speakers - https://github.com/bencevans/node-sonos
 * Allow casting to Ruko - https://github.com/TheThingSystem/node-roku

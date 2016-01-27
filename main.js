@@ -75,6 +75,7 @@ mb.on('ready', function ready() {
 
         switch (device.type) {
             case DeviceMatcher.TYPES.CHROMECAST:
+
                 if (DeviceMatcher.isChromecast(device) || DeviceMatcher.isChromecastAudio(device)) {
                     devicesAdded.push(device);
                     deviceListMenu.append(MenuFactory.chromeCastItem(device, function onClicked() {
@@ -129,6 +130,42 @@ mb.on('ready', function ready() {
         mb.tray.setContextMenu(menu);
     });
 
+    // Stream Options
+    var streamMenu = new Menu();
+    streamMenu.append(new MenuItem({
+        label: 'OSX Output (default)',
+        click: function () {
+            LocalSourceSwitcher.switchSource({
+                output: 'Soundflower (2ch)',
+                input: 'Soundflower (2ch)'
+            });
+            NotificationService.notify({
+                title: 'Audio Source Switched',
+                message: 'OSX Audio via Soundflower'
+            });
+        }
+    }));
+    streamMenu.append(new MenuItem({
+        label: 'Internal Microphone',
+        click: function () {
+            LocalSourceSwitcher.switchSource({
+                output: 'Soundflower (2ch)',
+                input: 'Internal Microphone'
+            });
+            NotificationService.notify({
+                title: 'Audio Source Switched',
+                message: 'Internal Microphone via Soundflower'
+            });
+        }
+    }));
+    streamMenu.append(MenuFactory.separator());
+    streamMenu.append(MenuFactory.aboutStreamFeature());
+
+    // Streaming Menu
+    menu.append(MenuFactory.separator());
+    menu.append(MenuFactory.steamMenu(streamMenu));
+    menu.append(MenuFactory.separator());
+
     //Clicking this option stops casting audio to Chromecast
     menu.append(new MenuItem({
         label: 'Stop casting',
@@ -136,15 +173,7 @@ mb.on('ready', function ready() {
         click: function () {
 
             // Attempt to stop all controls
-            devicesAdded.forEach(function (device) {
-                if (device && device.controls && _.isFunction(device.controls.stop)) {
-                    device.controls.stop(function (err, result) {
-                        // do something...
-                    });
-                } else {
-                    logger.debug('Unknown handled device', _.keys(device))
-                }
-            });
+            attemptToStopAllDevices();
 
             // Clean up playing speaker icon
             deviceListMenu.items.forEach(MenuFactory.removeSpeaker);
@@ -168,6 +197,16 @@ mb.on('ready', function ready() {
         item.enabled = false
     };
 
+    var attemptToStopAllDevices = function () {
+        devicesAdded.forEach(function (device) {
+            if (_.has(device, 'controls') && _.isFunction(device.controls.stop)) {
+                device.controls.stop(function (err, result) {
+                    // do something...
+                });
+            }
+        });
+    };
+
     var setSpeakIcon = function (item) {
         if (item.label === this.device.name) {
             MenuFactory.setSpeaker(item);
@@ -178,6 +217,7 @@ mb.on('ready', function ready() {
 
     var onQuitHandler = function () {
         mb.tray.setImage(path.join(__dirname, 'not-castingTemplate.png'));
+        attemptToStopAllDevices();
         LocalSoundStreamer.stopStream();
         LocalSourceSwitcher.resetOriginSource();
         mb.app.quit();
