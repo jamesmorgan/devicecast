@@ -12,10 +12,6 @@ var MenuItem = require('menu-item');
 var dialog = require('dialog');
 var mb = menubar({dir: __dirname, icon: 'not-castingTemplate.png'});
 
-/* Libs - Chromecast */
-var Client = require('castv2-client').Client;
-var DefaultMediaReceiver = require('castv2-client').DefaultMediaReceiver;
-
 /* Internals */
 var MenuFactory = require('./lib/native/MenuFactory');
 var NotificationService = require('./lib/native/NotificationService');
@@ -27,6 +23,7 @@ var UpnpMediaClientUtils = require('./lib/device/utils/UpnpMediaClientUtils');
 
 var LocalSoundStreamer = require('./lib/sound/LocalSoundStreamerExec');
 
+/* Various Device controllers */
 var JongoSpeaker = require('./lib/device/controls/JongoSpeaker');
 var ChromeCast = require('./lib/device/controls/ChromeCast');
 
@@ -92,20 +89,7 @@ mb.on('ready', function ready() {
                         if (!device.controls) {
                             device.controls = new ChromeCast(device);
                         }
-
-                        device.controls.play(streamingAddress, function () {
-                            //Disables all devices until further stop
-                            deviceListMenu.items.forEach(disableAllItems);
-
-                            // set speak icon when playing
-                            deviceListMenu.items.forEach(setSpeakIcon.bind({device: device}));
-
-                            // Enable 'Stop Casting' item
-                            menu.items[2].enabled = true;
-
-                            // Changes tray icon to "Casting"
-                            mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
-                        });
+                        device.controls.play(streamingAddress, onStreamingUpdateUI.bind({device: device}));
                     }));
                 }
                 break;
@@ -133,20 +117,7 @@ mb.on('ready', function ready() {
                         if (!device.controls) {
                             device.controls = new JongoSpeaker(device);
                         }
-
-                        device.controls.play(streamingAddress, function () {
-                            //Disables all devices until further stop
-                            deviceListMenu.items.forEach(disableAllItems);
-
-                            // set speak icon when playing
-                            deviceListMenu.items.forEach(setSpeakIcon.bind({device: device}));
-
-                            // Enable 'Stop Casting' item
-                            menu.items[2].enabled = true;
-
-                            // Changes tray icon to "Casting"
-                            mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
-                        });
+                        device.controls.play(streamingAddress, onStreamingUpdateUI.bind({device: device}));
                     }));
                 }
                 break;
@@ -210,6 +181,20 @@ mb.on('ready', function ready() {
         LocalSoundStreamer.stopStream();
         LocalSourceSwitcher.resetOriginSource();
         mb.app.quit();
+    };
+
+    var onStreamingUpdateUI = function () {
+        //Disables all devices until further stop
+        deviceListMenu.items.forEach(disableAllItems);
+
+        // set speak icon when playing
+        deviceListMenu.items.forEach(setSpeakIcon.bind({device: this.device}));
+
+        // Enable 'Stop Casting' item
+        menu.items[2].enabled = true;
+
+        // Changes tray icon to "Casting"
+        mb.tray.setImage(path.join(__dirname, 'castingTemplate.png'));
     };
 
     // About
